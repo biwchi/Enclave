@@ -1,7 +1,7 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -9,8 +9,8 @@ import { Category } from './category.entity';
 
 @Entity()
 export class Product {
-  @PrimaryGeneratedColumn({ name: 'product_id' })
-  id: number;
+  @PrimaryGeneratedColumn('uuid', { name: 'product_id' })
+  id: string;
 
   @Column()
   title: string;
@@ -21,9 +21,14 @@ export class Product {
   @Column()
   price: number;
 
-  @ManyToOne(() => Category, (category) => category.type)
-  @JoinColumn({
-    name: 'category_id',
+  @Column({ nullable: true })
+  imageUrl: string;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @ManyToOne(() => Category, (category) => category.id, {
+    onDelete: 'CASCADE',
   })
   category: Category;
 }

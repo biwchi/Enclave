@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -19,10 +18,9 @@ export class User {
   @Column()
   password: string;
 
-  @OneToOne(() => Cart, (cart) => cart.user, { onDelete: 'CASCADE' })
-  @JoinColumn()
-  cart: Cart;
-
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToOne(() => Cart, (cart) => cart.user)
+  cart: Cart;
 }

@@ -2,21 +2,29 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
-import { Product } from 'src/products/entities/product.entity';
+import { CartItem } from './cart-item.entity';
 
 @Entity()
 export class Cart {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
-  @OneToOne(() => User, (user) => user.cart, { onDelete: 'CASCADE' })
+  @OneToOne(() => User, (user) => user.cart)
   @JoinColumn()
   user: User;
 
-  @Column({ type: 'json', nullable: true })
-  items: Product[];
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @Column()
+  total: number;
+
+  @OneToMany(() => CartItem, (cartItem) => cartItem.cart_id)
+  items: Cart[];
 }
