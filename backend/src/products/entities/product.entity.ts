@@ -4,12 +4,13 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Category } from './category.entity';
 
 @Entity()
 export class Product {
-  @PrimaryGeneratedColumn('uuid', { name: 'product_id' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -26,6 +27,9 @@ export class Product {
 
   @CreateDateColumn()
   created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @ManyToOne(() => Category, (category) => category.id, {
     onDelete: 'CASCADE',

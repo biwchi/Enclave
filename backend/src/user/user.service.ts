@@ -12,7 +12,8 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const userExist = this.finsOne(createUserDto.email);
+    const userExist = await this.finsOne(createUserDto.email);
+    console.log(userExist);
     if (userExist) throw new BadRequestException('This email alredy used');
     const user = await this.userRepository.save({
       ...createUserDto,

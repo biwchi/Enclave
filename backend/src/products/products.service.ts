@@ -8,9 +8,8 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { isUUID } from 'class-validator';
 import { Category } from './entities/category.entity';
-import { isInt32Array } from 'util/types';
+import { handleUUID } from 'src/utils';
 
 @Injectable()
 export class ProductsService {
@@ -21,17 +20,8 @@ export class ProductsService {
     private readonly categoryRepositry: Repository<Category>,
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
-    const isCategoryExist = await this.categoryRepositry.findOne({
-      where: {
-        id: createProductDto.category,
-      },
-    });
-
-    if (!isCategoryExist) {
-      throw new BadRequestException("This category doesn't exist");
-    }
-
+  public async create(createProductDto: CreateProductDto) {
+    await this.checkCategory(createProductDto.category);
     const newProduct = await this.productRepository.insert({
       ...createProductDto,
       category: {
@@ -41,7 +31,7 @@ export class ProductsService {
     return { ...newProduct.raw, ...createProductDto };
   }
 
-  async productByCategory(category: number) {
+  public async productByCategory(category: number) {
     return await this.productRepository.find({
       relations: {
         category: true,
@@ -56,7 +46,7 @@ export class ProductsService {
     });
   }
 
-  async findAll() {
+  public async findAll() {
     return await this.productRepository.find({
       relations: {
         category: true,
@@ -64,9 +54,8 @@ export class ProductsService {
     });
   }
 
-  async findOne(id: string) {
-    if (!isUUID(id)) throw new BadRequestException('ID is not valid');
-
+  public async findOne(id: string) {
+    handleUUID(id);
     const product = await this.productRepository.findOne({
       relations: {
         category: true,
@@ -79,31 +68,32 @@ export class ProductsService {
     throw new NotFoundException();
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto) {
-    if (!isUUID(id)) throw new BadRequestException('ID is not valid');
-    const isCategoryExist = await this.categoryRepositry.findOne({
-      where: {
-        id: updateProductDto.category,
-      },
-    });
-
-    if (!isCategoryExist) {
-      throw new BadRequestException("This category doesn't exist");
-    }
-
-    const product = await this.productRepository.update(id, {
+  public async update(id: string, updateProductDto: UpdateProductDto) {
+    handleUUID(id);
+    await this.checkCategory(updateProductDto.category);
+    await this.productRepository.update(id, {
       ...updateProductDto,
       category: { id: updateProductDto.category },
     });
 
+    return `${id} updated`;
+  }
+
+  public async remove(id: string) {
+    handleUUID(id);
+    await this.productRepository.delete(id);
     return;
   }
 
-  remove(id: string) {
-    if (!isUUID(id)) throw new BadRequestException('ID is not valid');
+  protected async checkCategory(category: number) {
+    const isCategoryExist = await this.categoryRepositry.findOne({
+      where: {
+        id: category,
+      },
+    });
 
-    
-
-    return `This action removes a #${id} product`;
+    if (!isCategoryExist && category) {
+      throw new BadRequestException("This category doesn't exist");
+    }
   }
 }

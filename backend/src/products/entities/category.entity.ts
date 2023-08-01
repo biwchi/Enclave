@@ -2,15 +2,15 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Product } from './product.entity';
 
 export enum CategoryTypes {
-  SMARTPHONE = 'smartphone',
-  LAPTOP = 'laptop',
+  SMARTPHONE = 'Smartphone',
+  LAPTOP = 'Laptop',
   PC = 'PC',
-  TV = 'tv',
+  TV = 'TV',
 }
 
 @Entity()
 export class Category {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('identity')
   id: number;
 
   @Column({
