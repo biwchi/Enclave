@@ -12,10 +12,12 @@ import {
   HttpException,
   HttpStatus,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('products')
 export class ProductsController {
@@ -33,6 +35,11 @@ export class ProductsController {
   findAll(@Query('category') category: number) {
     if (category) return this.productsService.productByCategory(category);
     return this.productsService.findAll();
+  }
+
+  @Get('category')
+  findCategory() {
+    return this.productsService.getCategory();
   }
 
   @Get(':id')

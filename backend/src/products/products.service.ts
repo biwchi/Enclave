@@ -46,6 +46,10 @@ export class ProductsService {
     });
   }
 
+  public async getCategory() {
+    return await this.categoryRepositry.find();
+  }
+
   public async findAll() {
     return await this.productRepository.find({
       relations: {
