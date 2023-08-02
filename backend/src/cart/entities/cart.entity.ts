@@ -13,7 +13,7 @@ import { CartItem } from './cart-item.entity';
 @Entity()
 export class Cart {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @OneToOne(() => User, (user) => user.cart)
   @JoinColumn()
@@ -22,9 +22,11 @@ export class Cart {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @Column()
+  @Column({ default: 0 })
   total: number;
 
-  @OneToMany(() => CartItem, (cartItem) => cartItem.cart_id)
+  @OneToMany(() => CartItem, (cartItem) => cartItem.cart, {
+    onDelete: 'CASCADE',
+  })
   items: Cart[];
 }

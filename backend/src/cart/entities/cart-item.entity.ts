@@ -21,6 +21,6 @@ export class CartItem {
   @CreateDateColumn()
   created_at: Date;
 
-  @ManyToOne(() => Cart, (cart) => cart.items)
-  cart_id: string;
+  @ManyToOne(() => Cart, (cart) => cart.items, {onDelete: 'CASCADE'})
+  cart: Cart;
 }
