@@ -16,7 +16,7 @@ export class CartItem {
 
   @OneToOne(() => Product, (product) => product)
   @JoinColumn()
-  product_id: string;
+  product: Product
 
   @CreateDateColumn()
   created_at: Date;
