@@ -21,7 +21,7 @@ export class DefaultMetaResponse {
     this.count = itemCount,
     this.page_size = defaultQuery.page_size
     this.page = defaultQuery.page,
-    this.hasNext = this.page > 1
-    this.hasPrevious = this.page < Math.ceil(itemCount / this.page_size)
+    this.hasPrevious = this.page > 1
+    this.hasNext = this.page < Math.ceil(itemCount / this.page_size)
   };
 }
