@@ -5,11 +5,14 @@ import {
 } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { handleUUID } from 'src/utils';
+import { DefaultQuery } from 'src/common/dto/defaultQuery.dto';
+import { DefaultResponse } from 'src/common/dto/defaultResponse.dto';
+import { DefaultMetaResponse } from 'src/common/dto/defaultMetaResponse.dto';
 
 @Injectable()
 export class ProductsService {
@@ -31,33 +34,33 @@ export class ProductsService {
     return { ...newProduct.raw, ...createProductDto };
   }
 
-  public async productByCategory(category: number) {
-    return await this.productRepository.find({
-      relations: {
-        category: true,
-      },
-      where: [
-        {
-          category: {
-            id: category,
-          },
-        },
-      ],
-    });
-  }
-
-  public async getCategory() {
+  public async getCategories() {
     return await this.categoryRepositry.find();
   }
 
-  public async findAll() {
-    return await this.productRepository.find({
+  public async findAll(defaultQuery: DefaultQuery, category: number) {
+    const products = await this.productRepository.findAndCount({
       relations: {
         category: true,
       },
+      where: {
+        category: {
+          id: category,
+        },
+        title: defaultQuery.search ? Like(`%${defaultQuery.search}%`) : null,
+      },
+      skip: defaultQuery.page,
+      take: defaultQuery.page_size,
     });
-  }
 
+    const meta = new DefaultMetaResponse({
+      itemCount: products[1],
+      defaultQuery,
+    });
+
+    return new DefaultResponse<Product>(products[0], meta);
+  }
+ 
   public async findOne(id: string) {
     handleUUID(id);
     const product = await this.productRepository.findOne({
@@ -68,6 +71,7 @@ export class ProductsService {
         id: id,
       },
     });
+
     if (product) return product;
     throw new NotFoundException();
   }

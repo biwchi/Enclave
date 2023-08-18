@@ -7,6 +7,7 @@ import { Cart } from './entities/cart.entity';
 import { CartItem } from './entities/cart-item.entity';
 import { Product } from 'src/products/entities/product.entity';
 import { IUser } from 'src/types/user';
+import { handleUUID } from 'src/utils';
 
 @Injectable()
 export class CartService {
@@ -30,13 +31,28 @@ export class CartService {
       where: { user: { id: user.id } },
     });
 
-    if (!product) throw new BadRequestException("This product doesn't exists");
-    if (!cart) throw new BadRequestException("This cart doesn't exists");
+    const isAlreadyExist = await this.cartItemRepository.findOne({
+      where: {
+        product: {
+          id: createCartDto.productId,
+        },
+      },
+    });
+
+    if (isAlreadyExist)
+      throw new BadRequestException('This product already exists');
+    else if (!product)
+      throw new BadRequestException("This product doesn't exists");
+    else if (!cart) throw new BadRequestException("This cart doesn't exists");
 
     await this.cartItemRepository.insert({
       product: { id: product.id },
       cart: { id: cart.id },
     });
+    await this.cartRepository.update(cart.id, {
+      total: cart.items.length,
+    });
+
     return;
   }
 
@@ -53,14 +69,24 @@ export class CartService {
         },
       },
     });
-    return cart;
+
+    const items = cart.items.map((item) => item.product);
+
+    return { ...cart, items };
   }
 
   update(id: number, updateCartDto: UpdateCartDto) {
     return `This action updates a #${id} cart`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cart`;
+  async remove(id: string) {
+    handleUUID(id);
+    const cartItem = await this.cartItemRepository.findOne({
+      where: { product: { id: id } },
+    });
+
+    if (!cartItem) throw new BadRequestException();
+    await this.cartItemRepository.delete(cartItem.id);
+    return;
   }
 }
