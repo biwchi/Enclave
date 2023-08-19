@@ -34,33 +34,40 @@ export class ProductsService {
     return { ...newProduct.raw, ...createProductDto };
   }
 
-  public async getCategories() {
-    return await this.categoryRepositry.find();
+  public async getCategories(defaultQuery: DefaultQuery) {
+    const [categories, itemCount] = await this.categoryRepositry.findAndCount();
+
+    const meta = new DefaultMetaResponse({
+      defaultQuery,
+      itemCount,
+    });
+
+    return new DefaultResponse(categories, meta);
   }
 
-  public async findAll(defaultQuery: DefaultQuery, category: number) {
-    const products = await this.productRepository.findAndCount({
+  public async findAll(defaultQuery: DefaultQuery, category?: number) {
+    const [products, itemCount] = await this.productRepository.findAndCount({
       relations: {
         category: true,
       },
       where: {
         category: {
-          id: category,
+          id: category ? category : undefined,
         },
         title: defaultQuery.search ? Like(`%${defaultQuery.search}%`) : null,
       },
-      skip: defaultQuery.page,
+      skip: defaultQuery.skip,
       take: defaultQuery.page_size,
     });
 
     const meta = new DefaultMetaResponse({
-      itemCount: products[1],
+      itemCount,
       defaultQuery,
     });
 
-    return new DefaultResponse<Product>(products[0], meta);
+    return new DefaultResponse<Product>(products, meta);
   }
- 
+
   public async findOne(id: string) {
     handleUUID(id);
     const product = await this.productRepository.findOne({

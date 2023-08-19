@@ -35,14 +35,14 @@ export class ProductsController {
   @Get()
   findAll(
     @Query() defaultQuery: DefaultQuery,
-    @Query('category') category: number,
+    @Query('category') category?: number,
   ) {
     return this.productsService.findAll(defaultQuery, category);
   }
 
   @Get('category')
-  findCategories() {
-    return this.productsService.getCategories();
+  findCategories(@Query() defaultQuery: DefaultQuery) {
+    return this.productsService.getCategories(defaultQuery);
   }
 
   @Get(':id')

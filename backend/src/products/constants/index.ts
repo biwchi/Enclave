@@ -3,5 +3,4 @@ export enum ProductsEnum {
   LAPTOP = 'Laptop',
   PC = 'PC',
   TV = 'TV',
-  PRODUCT_REPOSITORY = 'PRODUCT_REPOSITORY',
 }
