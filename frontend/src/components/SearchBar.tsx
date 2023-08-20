@@ -1,6 +1,6 @@
 import LogoIcon from '@/assets/LogoIcon';
 import CustomSelect, { Option } from './UI/CustomSelect';
-import { useRef, useState } from 'react';
+import { MouseEvent, useRef, useState } from 'react';
 import SearchIcon from '@/assets/SearchIcon';
 import IconButton from './UI/IconButton';
 import UserIcon from '@/assets/UserIcon';
@@ -11,6 +11,7 @@ import { createPortal } from 'react-dom';
 import CloseIcon from '@/assets/CloseIcon';
 import { useOnClickOutside } from 'usehooks-ts';
 import Accordion from './UI/Accordion';
+import CategoriesDropDown from './CategoriesDropDown';
 
 export default function SearchBar() {
   const [isSideBar, setIsSideBar] = useState(false);
@@ -57,10 +58,10 @@ function Search() {
       <input
         placeholder="Search for products"
         type="text"
-        className="bg-transparent flex-auto p-3 px-6	"
+        className="flex-auto bg-transparent p-3 px-6	"
       />
       <div className="flex items-center">
-        <div className="bg-gray-200 mr-2 h-[70%] w-0.5"></div>
+        <div className="mr-2 h-[70%] w-0.5 bg-gray-200"></div>
         <CustomSelect
           selected={searchField}
           placeholder="All categories"
@@ -85,28 +86,71 @@ type SideBarMenuProps = {
 
 function SideBarMenu({ opened, closeSideBar }: SideBarMenuProps) {
   const sideBar = useRef(null);
+  const dropDownRef = useRef<HTMLDivElement | null>(null);
+  const [dropDown, setDropDown] = useState(-1);
+
+  function openDropDown(idx: number) {
+    setDropDown(() => (idx === dropDown ? -1 : idx));
+
+  }
+
+  const categories = [
+    {
+      title: options[0],
+      items: options.map((opt, idx) => ({ id: idx, title: opt }))
+    },
+    {
+      title: options[1],
+      items: options.map((opt, idx) => ({ id: idx, title: opt }))
+    },
+    {
+      title: options[2],
+      items: options.map((opt, idx) => ({ id: idx, title: opt }))
+    },
+    {
+      title: options[3],
+      items: options.map((opt, idx) => ({ id: idx, title: opt }))
+    },
+    {
+      title: options[1],
+      items: options.map((opt, idx) => ({ id: idx, title: opt }))
+    }
+  ];
 
   useOnClickOutside(sideBar, () => closeSideBar());
   return (
     <div
       ref={sideBar}
-      className={
-        'absolute z-[10000] h-full w-72 pt-14 transition overflow-auto ' +
-        (opened ? 'translate-x-0 shadow-2xl' : '-translate-x-full')
-      }>
-      <div className="flex items-center  justify-between px-7">
-        <h1 className="text-2xl font-semibold">Welcome!</h1>
-        <IconButton onClick={closeSideBar} icon={<CloseIcon width={24} height={24} />} />
-      </div>
+      className={'absolute z-[10000] flex h-full ' + (opened ? 'visible' : 'invisible')}>
+      <div
+        className={
+          'w-72 overflow-auto bg-white pt-14 transition ' +
+          (opened ? 'translate-x-0 shadow-2xl' : '-translate-x-full')
+        }>
+        <div className="flex items-center justify-between px-7">
+          <h1 className="text-2xl font-semibold">Welcome!</h1>
+          <IconButton onClick={closeSideBar} icon={<CloseIcon width={24} height={24} />} />
+        </div>
 
-      <div className="mt-8 px-5">
-        {options.map((option) => {
-          return (
-            <div className='my-2'>
-              <Accordion title={option} items={options} />
-            </div>
-          );
-        })}
+        <div className="mt-8 flex flex-col">
+          {options.map((option, idx) => {
+            return (
+              <div
+                key={idx}
+                className="relative border-b border-solid border-gray-200 last:border-none">
+                <Accordion
+                  isOpened={dropDown === idx}
+                  onOpen={() => openDropDown(idx)}
+                  title={option}
+                  items={options}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="absolute left-[270px] top-1/2 -translate-y-1/2">
+        <CategoriesDropDown categories={categories} />
       </div>
     </div>
   );
