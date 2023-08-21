@@ -13,14 +13,21 @@ export default function IconButton({
   icon,
   onClick,
   title,
-  className,
+  className = '',
   text,
   background = 'bg-transparent'
 }: IconButtonProps) {
   return (
-    <div title={title} className={className + ' flex items-center gap-2 font-medium ' + background}>
-      <button onClick={onClick}>{icon}</button>
-      <p>{text}</p>
+    <div
+      title={title}
+      onClick={onClick}
+      className={
+        className +
+        ' flex items-center cursor-pointer justify-center gap-2 rounded-md p-2 font-medium transition hover:bg-gray-100 ' +
+        background
+      }>
+      <button>{icon}</button>
+      {text && <p>{text}</p>}
     </div>
   );
 }
