@@ -1,4 +1,4 @@
-import { DragEvent, MouseEvent, useRef, useState } from 'react';
+import { DragEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 
 type MainSliderProps = {
   slides: JSX.Element[];
@@ -7,40 +7,56 @@ type MainSliderProps = {
 export default function MainSlider({ slides }: MainSliderProps) {
   const sliderRef = useRef<HTMLDivElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
-  let current = 0;
-  let sliderPosition = 0;
-  let pressed = false;
+  const pressed = useRef(false);
+  const sliderPosition = useRef({
+    x: 0,
+    lastX: 0
+  });
 
-  const mouseUp = () => (pressed = false);
+  const [current, setCurrent] = useState(0);
 
-  function onDragEvent(e: MouseEvent<HTMLDivElement>) {
-    e.preventDefault();
-    if (!wrapperRef.current || !sliderRef.current) return;
-    if (!pressed) return;
-    wrapperRef.current.style.translate = e.currentTarget.offsetLeft - sliderPosition + 'px';
-    console.log(e.currentTarget.offsetLeft - sliderPosition + 'px')
-  }
+  useEffect(() => {
+    const mouseDown = (e: globalThis.MouseEvent) => {
+      if (!wrapperRef.current || !sliderRef.current) return;
+      pressed.current = true;
+      sliderPosition.current.x = e.offsetX - wrapperRef.current.offsetLeft;
+    };
 
-  function onMouseDown(e: MouseEvent<HTMLDivElement>) {
-    if (!wrapperRef.current || !sliderRef.current) return;
-    pressed = true;
-    sliderPosition = e.currentTarget.offsetLeft - wrapperRef.current.offsetLeft;
-  }
+    const mouseUp = () => {
+      pressed.current = false;
+    };
+
+    const mouseMove = (e: globalThis.MouseEvent) => {
+      if (!wrapperRef.current || !sliderRef.current) return;
+      if (!pressed.current) return;
+      e.preventDefault();
+
+      sliderPosition.current.lastX = e.offsetX - sliderPosition.current.x;
+      wrapperRef.current.style.transform = `translateX(${
+        e.offsetX - sliderPosition.current.lastX
+      }px)`;
+    };
+
+    sliderRef.current?.addEventListener('mousedown', mouseDown);
+    sliderRef.current?.addEventListener('mousemove', mouseMove);
+    sliderRef.current?.addEventListener('mouseup', mouseUp);
+
+    return () => {
+      sliderRef.current?.removeEventListener('mousedown', mouseDown);
+      sliderRef.current?.removeEventListener('mousemove', mouseMove);
+      sliderRef.current?.removeEventListener('mouseup', mouseUp);
+    };
+  }, []);
 
   return (
     <div ref={sliderRef} className="relative">
-      <div
-        className={'flex'}
-        ref={wrapperRef}
-        onMouseDown={(e) => onMouseDown(e)}
-        onMouseUp={mouseUp}
-        onMouseMove={(e) => onDragEvent(e)}>
+      <div className={'flex'} ref={wrapperRef}>
         {slides.map((slide, idx) => (
           <div key={idx}>{slide}</div>
         ))}
       </div>
       <div className="absolute bottom-7 left-1/2 -translate-x-1/2">
-        <SliderPagination goTo={(idx) => (current = idx)} current={current} count={slides.length} />
+        <SliderPagination goTo={(idx) => setCurrent(idx)} current={current} count={slides.length} />
       </div>
     </div>
   );
