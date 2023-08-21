@@ -11,7 +11,7 @@ export type Option = OptionObj | string | number;
 
 type CustomSelectProps = {
   selected: Option;
-  placeholder: string;
+  placeholder?: string;
   options: Option[];
   rouneded?: boolean;
   onSelect: (option: Option) => void;
@@ -56,20 +56,20 @@ export default function CustomSelect({
   });
 
   return (
-    <div className="relative w-48" ref={selectRef}>
+    <div className="relative w-48 border border-gray-100" ref={selectRef}>
       <div
         onClick={() => setOpened((v) => (v = !v))}
         className={
-          'flex cursor-pointer select-none items-center justify-between p-4 hover:bg-primary-100 ' +
-          (opened ? 'bg-primary-100' : 'bg-white')
+          'flex cursor-pointer select-none items-center border border-solid border-gray-100 justify-between p-4 hover:bg-primary-100 ' +
+          (opened ? 'rounded-t-3xl bg-primary-100' : 'rounded-3xl bg-white')
         }>
-        <div>{selected ? defineTitle(selected) : placeholder}</div>
+        <h1>{selected ? defineTitle(selected) : placeholder}</h1>
         <ChevronIcon rotate={opened} />
       </div>
       <div
         className={
           'absolute z-50 flex max-h-60 w-full flex-col items-center overflow-auto bg-white shadow-lg transition last:rounded-b-2xl ' +
-          (opened ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0 invisible')
+          (opened ? 'translate-y-0 opacity-100' : 'invisible translate-y-2 opacity-0')
         }>
         {optionsRender}
       </div>
