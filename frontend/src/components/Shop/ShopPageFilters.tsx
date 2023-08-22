@@ -8,13 +8,31 @@ export default function ShopPageFilters() {
   return (
     <div>
       <ShopPageFilterCategories />
-      <div className="pt-5">
+      <div className="">
         <ShopPageFilter
           selected={selectedBrand}
           onSelect={(option) => setSelectedBrand(option)}
           title="Brand"
           options={['Appge', 'Samsung', 'Xiaomi']}
         />
+         <ShopPageFilter
+          selected={selectedBrand}
+          onSelect={(option) => setSelectedBrand(option)}
+          title="Brand"
+          options={['Appge', 'Samsung', 'Xiaomi']}
+        />
+         <ShopPageFilter
+          selected={selectedBrand}
+          onSelect={(option) => setSelectedBrand(option)}
+          title="Brand"
+          options={['Appge', 'Samsung', 'Xiaomi']}
+        />
+         <ShopPageFilter
+          selected={selectedBrand}
+          onSelect={(option) => setSelectedBrand(option)}
+          title="Brand"
+          options={['Appge', 'Samsung', 'Xiaomi']}
+        />  
       </div>
     </div>
   );

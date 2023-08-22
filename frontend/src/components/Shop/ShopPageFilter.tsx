@@ -25,7 +25,7 @@ export default function ShopPageFilter({
   }
 
   return (
-    <div className="rounded-md border border-solid border-gray-100 p-5">
+    <div className="rounded-md border border-solid border-gray-100 p-5 my-5">
       <h1 className="font-medium ">{title}</h1>
 
       <ul>
