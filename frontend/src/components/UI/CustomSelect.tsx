@@ -32,11 +32,6 @@ export default function CustomSelect({
     setOpened(false);
   }
 
-  function defineTitle(option: Option | string) {
-    if (typeof option === 'object') return option.title;
-    else return option.toString();
-  }
-
   useOnClickOutside(selectRef, () => setOpened(false));
 
   const optionsRender = options.map((option, idx) => {
@@ -75,4 +70,9 @@ export default function CustomSelect({
       </div>
     </div>
   );
+}
+
+export function defineTitle(option: Option) {
+  if (typeof option === 'object') return option.title;
+  else return option.toString();
 }
