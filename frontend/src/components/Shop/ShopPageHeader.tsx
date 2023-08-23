@@ -1,18 +1,22 @@
-import GridIcon from '@/assets/GridIcon';
+import GridIcon from '@/assets/icons/GridIcon';
 import CustomSelect from '../UI/CustomSelect';
 import IconButton from '../UI/IconButton';
-import RowsIcon from '@/assets/RowsIcon';
+import RowsIcon from '@/assets/icons/RowsIcon';
 
 type ShopPageHeaderProps = {
   title?: string;
   productsCount?: number;
+  viewMode: 'grid' | 'rows';
+  changeMode: (mode: 'grid' | 'rows') => void;
 };
 
 const sorting = ['Ascending', 'Descinding', 'Rating', 'Popular'];
 
 export default function ShopPageHeader({
   productsCount = 93248,
-  title = 'Shop'
+  title = 'Shop',
+  viewMode,
+  changeMode
 }: ShopPageHeaderProps) {
   return (
     <div className="rounded-md border border-solid border-gray-100 p-5">
@@ -28,8 +32,16 @@ export default function ShopPageHeader({
 
       <div className="mt-3 flex items-center justify-between">
         <div className="flex gap-2">
-          <IconButton icon={<GridIcon width={18} height={18} className="text-gray-500" />} />
-          <IconButton icon={<RowsIcon />} />
+          <IconButton
+            onClick={() => changeMode('grid')}
+            selected={viewMode === 'grid'}
+            icon={<GridIcon width={18} height={18} className="text-gray-500" />}
+          />
+          <IconButton
+            onClick={() => changeMode('rows')}
+            selected={viewMode === 'rows'}
+            icon={<RowsIcon />}
+          />
         </div>
         <div className="flex gap-2">
           <CustomSelect selected={'Rating'} onSelect={() => {}} options={sorting} rouneded />

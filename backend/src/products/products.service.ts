@@ -13,6 +13,8 @@ import { handleUUID } from 'src/utils';
 import { DefaultQuery } from 'src/common/dto/defaultQuery.dto';
 import { DefaultResponse } from 'src/common/dto/defaultResponse.dto';
 import { DefaultMetaResponse } from 'src/common/dto/defaultMetaResponse.dto';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { SubCategory } from './entities/subCategory.entity';
 
 @Injectable()
 export class ProductsService {
@@ -21,12 +23,16 @@ export class ProductsService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(Category)
     private readonly categoryRepositry: Repository<Category>,
+    @InjectRepository(SubCategory)
+    private readonly subCategoryRepositry: Repository<SubCategory>,
   ) {}
 
   public async create(createProductDto: CreateProductDto) {
+    console.log(createProductDto);
     await this.checkCategory(createProductDto.category);
     const newProduct = await this.productRepository.insert({
       ...createProductDto,
+      imageUrl: createProductDto.imageUrl,
       category: {
         id: createProductDto.category,
       },
@@ -34,8 +40,28 @@ export class ProductsService {
     return { ...newProduct.raw, ...createProductDto };
   }
 
+  public async createCategory(
+    createCategoryDto: CreateCategoryDto,
+    sub?: boolean,
+  ) {
+    if (sub) {
+      await this.subCategoryRepositry.insert({
+        ...createCategoryDto,
+
+        category: { id: createCategoryDto.id },
+      });
+    } else {
+      console.log(createCategoryDto);
+      await this.categoryRepositry.insert({ title: createCategoryDto.title });
+    }
+  }
+
   public async getCategories(defaultQuery: DefaultQuery) {
-    const [categories, itemCount] = await this.categoryRepositry.findAndCount();
+    const [categories, itemCount] = await this.categoryRepositry.findAndCount({
+      relations: { subCategories: true },
+      skip: defaultQuery.skip,
+      take: defaultQuery.page_size,
+    });
 
     const meta = new DefaultMetaResponse({
       defaultQuery,
@@ -48,7 +74,7 @@ export class ProductsService {
   public async findAll(defaultQuery: DefaultQuery, category?: number) {
     const [products, itemCount] = await this.productRepository.findAndCount({
       relations: {
-        category: true,
+        category: { subCategories: true },
       },
       where: {
         category: {
@@ -86,8 +112,10 @@ export class ProductsService {
   public async update(id: string, updateProductDto: UpdateProductDto) {
     handleUUID(id);
     await this.checkCategory(updateProductDto.category);
+    console.log(updateProductDto);
     await this.productRepository.update(id, {
       ...updateProductDto,
+      imageUrl: updateProductDto.imageUrl,
       category: { id: updateProductDto.category },
     });
 

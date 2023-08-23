@@ -18,7 +18,7 @@ export class DefaultQuery {
   @Min(1)
   @IsInt()
   @IsOptional()
-  readonly page_size?: number = 10;
+  readonly page_size?: number = 20;
 
   @IsOptional()
   readonly search?: string;

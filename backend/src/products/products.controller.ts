@@ -19,6 +19,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { DefaultQuery } from 'src/common/dto/defaultQuery.dto';
+import { CreateCategoryDto } from './dto/create-category.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -30,6 +31,14 @@ export class ProductsController {
     return await this.productsService.create(createProductDto).catch((err) => {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     });
+  }
+
+  @Post('category')
+  createCategory(
+    @Body() createCategoryDto: CreateCategoryDto,
+    @Query('sub') sub?: boolean,  
+  ) {
+    return this.productsService.createCategory(createCategoryDto, sub);
   }
 
   @Get()

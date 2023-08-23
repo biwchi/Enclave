@@ -1,5 +1,13 @@
-import { Column, Entity, Generated, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Generated,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Product } from './product.entity';
+import { SubCategory } from './subCategory.entity';
 
 export enum CategoryTypes {
   SMARTPHONE = 'Smartphone',
@@ -13,11 +21,11 @@ export class Category {
   @PrimaryGeneratedColumn('identity')
   id: number;
 
-  @Column({
-    type: 'enum',
-    enum: CategoryTypes,
-  })
-  type: string;
+  @Column()
+  title: string;
+
+  @OneToMany(() => SubCategory, (subCategory) => subCategory.category)
+  subCategories: SubCategory[];
 
   @OneToMany(() => Product, (product) => product.category)
   products: Product[];

@@ -1,5 +1,5 @@
 import { MouseEvent, useState } from 'react';
-import ChevronLightIcon from '@/assets/ChevronLightIcon';
+import ChevronLightIcon from '@/assets/icons/ChevronLightIcon';
 
 type AccordionProps = {
   title: string;

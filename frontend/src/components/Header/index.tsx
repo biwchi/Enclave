@@ -1,14 +1,14 @@
-import LogoIcon from '@/assets/LogoIcon';
+import LogoIcon from '@/assets/icons/LogoIcon';
 import CustomSelect, { Option } from '../UI/CustomSelect';
 import { MouseEvent, useRef, useState } from 'react';
-import SearchIcon from '@/assets/SearchIcon';
+import SearchIcon from '@/assets/icons/SearchIcon';
 import IconButton from '../UI/IconButton';
-import UserIcon from '@/assets/UserIcon';
-import FavoriteIcon from '@/assets/favoriteIcon';
-import CartIcon from '@/assets/CartIcon';
-import BurgerMenuIcon from '@/assets/BurgerMenuIcon';
+import UserIcon from '@/assets/icons/UserIcon';
+import FavoriteIcon from '@/assets/icons/favoriteIcon';
+import CartIcon from '@/assets/icons/CartIcon';
+import BurgerMenuIcon from '@/assets/icons/BurgerMenuIcon';
 import { createPortal } from 'react-dom';
-import CloseIcon from '@/assets/CloseIcon';
+import CloseIcon from '@/assets/icons/CloseIcon';
 import { useOnClickOutside } from 'usehooks-ts';
 import Accordion from '../UI/Accordion';
 import CategoriesDropDown from './CategoriesDropDown';
@@ -107,7 +107,7 @@ export default function SearchBar() {
         onMouseEnter={() => setSelected(selected)}
         onMouseLeave={() => setSelected(-1)}
         className={
-          'absolute transition-all ' +
+          'absolute z-[1000] transition-all ' +
           (selected !== -1 ? 'visible opacity-100' : 'invisible opacity-0')
         }>
         <CategoriesDropDown categories={categories} />
@@ -131,11 +131,10 @@ function Search() {
           selected={searchField}
           placeholder="All categories"
           options={options}
-          rouneded
           onSelect={(opt) => setSearchField(opt)}
         />
       </div>
-      <div className="aspect-square h-12">
+      <div className="aspect-square h-[3.1rem]">
         <button className="flex h-full w-full items-center justify-center rounded-br-full rounded-tr-full bg-primary-600 transition hover:bg-primary-700">
           <SearchIcon className="text-white" height={20} width={20} />
         </button>

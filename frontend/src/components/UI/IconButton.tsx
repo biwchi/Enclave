@@ -6,6 +6,7 @@ type IconButtonProps = {
   title?: string;
   text?: string;
   className?: string;
+  selected?: boolean;
   onClick?: () => void;
 };
 
@@ -15,7 +16,8 @@ export default function IconButton({
   title,
   className = '',
   text,
-  background = 'bg-transparent'
+  selected,
+  background = ''
 }: IconButtonProps) {
   return (
     <div
@@ -23,8 +25,9 @@ export default function IconButton({
       onClick={onClick}
       className={
         className +
-        ' flex items-center cursor-pointer justify-center gap-2 rounded-md p-2 font-medium transition hover:bg-gray-100 ' +
-        background
+        ' flex cursor-pointer items-center justify-center gap-2 rounded-md p-2 font-medium transition ' +
+        background +
+        (selected ? ' bg-gray-200 ' : ' hover:bg-gray-100 ')
       }>
       <button>{icon}</button>
       {text && <p>{text}</p>}

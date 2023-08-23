@@ -1,6 +1,6 @@
-import MdiChevronDown from '@/assets/ChevronLightIcon';
+import MdiChevronDown from '@/assets/icons/ChevronLightIcon';
 import { Option, defineTitle } from '../UI/CustomSelect';
-import CheckIcon from '@/assets/CheckIcon';
+import CheckIcon from '@/assets/icons/CheckIcon';
 
 type ShopPageFilterProps = {
   title: string;
@@ -25,7 +25,7 @@ export default function ShopPageFilter({
   }
 
   return (
-    <div className="rounded-md border border-solid border-gray-100 p-5 my-5">
+    <div className="my-5 rounded-md border border-solid border-gray-100 p-5">
       <h1 className="font-medium ">{title}</h1>
 
       <ul>
@@ -33,12 +33,14 @@ export default function ShopPageFilter({
           return (
             <li
               onClick={() => onSelect(option)}
-              className="flex cursor-pointer items-center gap-3 pb-5 text-sm text-gray-700 first:pt-5">
+              className="-ml-2.5 flex cursor-pointer items-center gap-3 rounded-md p-2.5 text-sm text-gray-700 first:mt-5 hover:bg-gray-100">
               <div
                 className={
                   'relative flex h-4 w-4 items-center justify-center rounded border-2 border-solid border-gray-700'
                 }>
-                {checkSelected(option) && <CheckIcon className="absolute" width={16} height={16} />}
+                {checkSelected(option) && (
+                  <CheckIcon className="absolute text-gray-700" width={18} height={18} />
+                )}
               </div>
               <p>{defineTitle(option)}</p>
             </li>
@@ -46,7 +48,7 @@ export default function ShopPageFilter({
         })}
       </ul>
 
-      <div className="flex cursor-pointer items-center gap-1 text-sm text-gray-700">
+      <div className="mt-2.5 flex cursor-pointer items-center gap-1 text-sm text-gray-700 hover:underline">
         <span>Show more</span>
         <MdiChevronDown />
       </div>

@@ -1,4 +1,4 @@
-import ChevronIcon from '@/assets/ChevronIcon';
+import ChevronIcon from '@/assets/icons/ChevronIcon';
 import { MouseEvent } from 'react';
 
 const options = ['Smartphone', 'Laptop', 'TV', 'PC'];

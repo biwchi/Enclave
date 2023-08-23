@@ -1,4 +1,4 @@
-import ChevronIcon from '@/assets/ChevronIcon';
+import ChevronIcon from '@/assets/icons/ChevronIcon';
 import { useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
 
@@ -55,8 +55,10 @@ export default function CustomSelect({
       <div
         onClick={() => setOpened((v) => (v = !v))}
         className={
-          'flex cursor-pointer select-none items-center border border-solid border-gray-100 justify-between p-4 hover:bg-primary-100 ' +
-          (opened ? 'rounded-t-3xl bg-primary-100' : 'rounded-3xl bg-white')
+          'flex cursor-pointer select-none items-center justify-between border border-solid border-gray-100 p-4 transition-all hover:bg-primary-100 ' +
+          (opened
+            ? `${rouneded && 'rounded-t-3xl'} bg-primary-100`
+            : `${rouneded && 'rounded-3xl'} bg-white`)
         }>
         <h1>{selected ? defineTitle(selected) : placeholder}</h1>
         <ChevronIcon rotate={opened} />
