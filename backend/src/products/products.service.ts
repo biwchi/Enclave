@@ -28,13 +28,14 @@ export class ProductsService {
   ) {}
 
   public async create(createProductDto: CreateProductDto) {
-    console.log(createProductDto);
     await this.checkCategory(createProductDto.category);
     const newProduct = await this.productRepository.insert({
       ...createProductDto,
-      imageUrl: createProductDto.imageUrl,
       category: {
         id: createProductDto.category,
+      },
+      subCategory: {
+        id: createProductDto.subCategory,
       },
     });
     return { ...newProduct.raw, ...createProductDto };
@@ -74,13 +75,17 @@ export class ProductsService {
   public async findAll(defaultQuery: DefaultQuery, category?: number) {
     const [products, itemCount] = await this.productRepository.findAndCount({
       relations: {
-        category: { subCategories: true },
+        category: true,
+        subCategory: true,
       },
       where: {
         category: {
           id: category ? category : undefined,
         },
         title: defaultQuery.search ? Like(`%${defaultQuery.search}%`) : null,
+      },
+      order: {
+        price: defaultQuery.ordering,
       },
       skip: defaultQuery.skip,
       take: defaultQuery.page_size,
@@ -112,11 +117,17 @@ export class ProductsService {
   public async update(id: string, updateProductDto: UpdateProductDto) {
     handleUUID(id);
     await this.checkCategory(updateProductDto.category);
-    console.log(updateProductDto);
     await this.productRepository.update(id, {
       ...updateProductDto,
       imageUrl: updateProductDto.imageUrl,
-      category: { id: updateProductDto.category },
+      category: {
+        id: updateProductDto.category ? updateProductDto.category : undefined,
+      },
+      subCategory: {
+        id: updateProductDto.subCategory
+          ? updateProductDto.subCategory
+          : undefined,
+      },
     });
 
     return `${id} updated`;

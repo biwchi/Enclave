@@ -2,9 +2,12 @@ import {
   Column,
   Entity,
   Generated,
+  JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
+  VirtualColumn,
 } from 'typeorm';
 import { Product } from './product.entity';
 import { SubCategory } from './subCategory.entity';
@@ -23,6 +26,12 @@ export class Category {
 
   @Column()
   title: string;
+
+  @VirtualColumn({
+    query: (alias) =>
+      `SELECT COUNT(*) FROM "product" WHERE "categoryId" = ${alias}.id`,
+  })
+  totalProducts: number;
 
   @OneToMany(() => SubCategory, (subCategory) => subCategory.category)
   subCategories: SubCategory[];

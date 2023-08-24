@@ -21,7 +21,7 @@ export default function ShopPageFilterCategories() {
     <div className="rounded-md bg-gray-100 p-5">
       <h1
         onClick={() => setSelectedCategory(null)}
-        className="mb-3.5 cursor-pointer rounded-md font-medium p-2.5 hover:bg-gray-200">
+        className="mb-3.5 cursor-pointer rounded-md p-2.5 font-medium hover:bg-gray-200">
         All categories
       </h1>
       {selectedCategory ? (
@@ -32,8 +32,8 @@ export default function ShopPageFilterCategories() {
             return (
               <li
                 onClick={() => setSelectedCategory(category)}
-                className="cursor-pointer rounded-md py-2.5 px-2.5 text-sm text-gray-700 last:pt-2.5  hover:bg-gray-200">
-                {category.title}
+                className="cursor-pointer rounded-md px-2.5 py-2.5 text-sm text-gray-700 last:pt-2.5  hover:bg-gray-200">
+                {category.title} <span>({category.totalProducts})</span>
               </li>
             );
           })}
@@ -54,9 +54,9 @@ function SubCategories({ selectedCategory }: { selectedCategory: Category }) {
           'flex cursor-pointer items-center justify-between pt-3.5 ' +
           (opened && !!selectedCategory.subCategories.length && 'pb-5')
         }>
-        <div className="hover:bg-gray-200 flex gap-1 rounded-md p-2">
+        <div className="flex gap-1 rounded-md p-2 hover:bg-gray-200">
           <h1>{selectedCategory.title}</h1>
-          <span>(1125)</span>
+          <span>({selectedCategory.totalProducts})</span>
         </div>
         {!!selectedCategory.subCategories.length && (
           <MdiChevronDown className={'transition ' + (opened ? 'rotate-180' : 'rotate-0')} />
@@ -76,8 +76,8 @@ function SubCategories({ selectedCategory }: { selectedCategory: Category }) {
             return (
               <li
                 onClick={() => {}}
-                className="cursor-pointer text-sm rounded-md py-2.5 px-2.5 text-gray-700 last:pt-2.5 hover:bg-gray-200">
-                {category.title}
+                className="cursor-pointer rounded-md px-2.5 py-2.5 text-sm text-gray-700 last:pt-2.5 hover:bg-gray-200">
+                {category.title} <span>({category.totalProducts})</span>
               </li>
             );
           })}

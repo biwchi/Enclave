@@ -12,5 +12,6 @@ export type Product = {
 export type Category = {
   id: number;
   title: string;
-  subCategories: { id: number; title: string }[];
+  totalProducts: number;
+  subCategories: { id: number; title: string; totalProducts: number }[];
 };
