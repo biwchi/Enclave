@@ -66,7 +66,7 @@ function SubCategories({ selectedCategory }: { selectedCategory: Category }) {
       <div
         className={
           'border-t border-solid border-gray-200 ' +
-          (opened && !!selectedCategory.subCategories.length
+          (opened && !!selectedCategory.subCategories.length && selectedCategory.subCategories[0].id
             ? 'visible pt-3.5 opacity-100'
             : ' invisible h-0 opacity-0')
         }>
