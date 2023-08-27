@@ -4,10 +4,10 @@ enum Ordering {
 }
 
 export type ApiParams = {
-  page: number;
-  page_size: number;
-  search: string;
-  ordering: Ordering;
+  page?: number;
+  page_size?: number;
+  search?: string;
+  ordering?: Ordering;
 };
 
 export type ResponseMeta = {
@@ -22,4 +22,9 @@ export type ResponseMeta = {
 export type DefaultResponse<T> = {
   meta: ResponseMeta;
   results: T[];
+};
+
+export type ItemTitleValue = {
+  title: string;
+  value: string | number;
 };

@@ -92,3 +92,13 @@ body {
 .bg-transparent {
   background-color: transparent;
 }
+
+.thumb,
+.thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.thumb::-webkit-slider-thumb {
+  @apply pointer-events-auto relative mt-1 h-5 w-5 cursor-pointer rounded-full border-2 border-solid border-white bg-primary-600 ring-primary-400 transition-all active:ring-2;
+}

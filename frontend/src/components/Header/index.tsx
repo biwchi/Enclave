@@ -139,7 +139,7 @@ function Search() {
           <SearchIcon className="text-white" height={20} width={20} />
         </button>
       </div>
-    </div>
+    </div>  
   );
 }
 
@@ -150,7 +150,6 @@ type SideBarMenuProps = {
 
 function SideBarMenu({ opened, closeSideBar }: SideBarMenuProps) {
   const sideBar = useRef(null);
-  const dropDownRef = useRef<HTMLDivElement | null>(null);
   const [dropDown, setDropDown] = useState(-1);
 
   function openDropDown(idx: number) {

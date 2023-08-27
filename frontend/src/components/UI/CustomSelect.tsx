@@ -1,26 +1,26 @@
 import ChevronIcon from '@/assets/icons/ChevronIcon';
+import { ItemTitleValue } from '@/services/types';
+import { useField } from 'formik';
 import { useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
 
-type OptionObj = {
-  title: string;
-  value: string | number;
-};
-
-export type Option = OptionObj | string | number;
+export type Option = ItemTitleValue | string | number;
 
 type CustomSelectProps = {
-  selected: Option;
+  selected?: Option;
   placeholder?: string;
   options: Option[];
+  name?: string;
+  label?: string;
   rouneded?: boolean;
-  onSelect: (option: Option) => void;
+  onSelect?: (option: Option) => void;
 };
 
 export default function CustomSelect({
   placeholder,
   selected,
   options,
+  label,
   onSelect,
   rouneded = false
 }: CustomSelectProps) {
@@ -28,7 +28,7 @@ export default function CustomSelect({
   const selectRef = useRef<HTMLDivElement | null>(null);
 
   function select(option: Option) {
-    onSelect(option);
+    onSelect && onSelect(option);
     setOpened(false);
   }
 
@@ -52,6 +52,8 @@ export default function CustomSelect({
 
   return (
     <div className="relative w-48 border border-gray-100" ref={selectRef}>
+      <input className="invisible hidden h-0 w-0 opacity-0" />
+      {label && <h1 className="pb-1 pl-4 font-medium">{label}</h1>}
       <div
         onClick={() => setOpened((v) => (v = !v))}
         className={
@@ -60,7 +62,13 @@ export default function CustomSelect({
             ? `${rouneded && 'rounded-t-3xl'} bg-primary-100`
             : `${rouneded && 'rounded-3xl'} bg-white`)
         }>
-        <h1>{selected ? defineTitle(selected) : placeholder}</h1>
+        <h1>
+          {defineTitle(selected) !== '' ? (
+            defineTitle(selected)
+          ) : (
+            <span className="text-gray-500">{placeholder}</span>
+          )}
+        </h1>
         <ChevronIcon rotate={opened} />
       </div>
       <div
@@ -74,7 +82,8 @@ export default function CustomSelect({
   );
 }
 
-export function defineTitle(option: Option) {
+export function defineTitle(option: Option | undefined) {
+  if (option === undefined) return '';
   if (typeof option === 'object') return option.title;
   else return option.toString();
 }

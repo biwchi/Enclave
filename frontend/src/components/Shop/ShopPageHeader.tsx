@@ -2,6 +2,10 @@ import GridIcon from '@/assets/icons/GridIcon';
 import CustomSelect from '../UI/CustomSelect';
 import IconButton from '../UI/IconButton';
 import RowsIcon from '@/assets/icons/RowsIcon';
+import { useShopStore } from '@/store/shopStore';
+import { useState } from 'react';
+import { ItemTitleValue } from '@/services/types';
+import { ProductsOrderig } from '@/constants/enums';
 
 type ShopPageHeaderProps = {
   title?: string;
@@ -10,7 +14,21 @@ type ShopPageHeaderProps = {
   changeMode: (mode: 'grid' | 'rows') => void;
 };
 
-const sorting = ['Ascending', 'Descinding', 'Rating', 'Popular'];
+const sorting: ItemTitleValue[] = [
+  {
+    title: 'Price ascending',
+    value: ProductsOrderig.PRICE_ACS
+  },
+  {
+    title: 'Price descinding',
+    value: ProductsOrderig.PRICE_DESC
+  },
+  {
+    title: 'Popular',
+    value: ProductsOrderig.POPUlAR
+  }
+];
+const productPerPage = [20, 40, 60];
 
 export default function ShopPageHeader({
   productsCount = 93248,
@@ -18,6 +36,9 @@ export default function ShopPageHeader({
   viewMode,
   changeMode
 }: ShopPageHeaderProps) {
+  const { filters, setFilters } = useShopStore();
+  const [itemsPerPage, setItemsPerPage] = useState(20);
+
   return (
     <div className="rounded-md border border-solid border-gray-100 p-5">
       <div className="flex items-center justify-between border-b border-solid border-gray-100 pb-5">
@@ -44,8 +65,18 @@ export default function ShopPageHeader({
           />
         </div>
         <div className="flex gap-2">
-          <CustomSelect selected={'Rating'} onSelect={() => {}} options={sorting} rouneded />
-          <CustomSelect selected={'Rating'} onSelect={() => {}} options={sorting} rouneded />
+          <CustomSelect
+            selected={filters.ordering}
+            onSelect={(ordering) => setFilters({ ordering })}
+            options={sorting}
+            rouneded
+          />
+          <CustomSelect
+            selected={itemsPerPage}
+            onSelect={(value) => setItemsPerPage(value)}
+            options={productPerPage}
+            rouneded
+          />
         </div>
       </div>
     </div>

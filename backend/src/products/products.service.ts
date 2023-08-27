@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Like, Repository } from 'typeorm';
+import { Between, Like, Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
@@ -15,6 +15,8 @@ import { DefaultResponse } from 'src/common/dto/defaultResponse.dto';
 import { DefaultMetaResponse } from 'src/common/dto/defaultMetaResponse.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { SubCategory } from './entities/subCategory.entity';
+import productFilters from './dto/product-filters.dto';
+import { ProductsOrderig } from './constants';
 
 @Injectable()
 export class ProductsService {
@@ -72,7 +74,11 @@ export class ProductsService {
     return new DefaultResponse(categories, meta);
   }
 
-  public async findAll(defaultQuery: DefaultQuery, category?: number) {
+  public async findAll(
+    defaultQuery: DefaultQuery,
+    category?: number,
+    productFilters?: productFilters,
+  ) {
     const [products, itemCount] = await this.productRepository.findAndCount({
       relations: {
         category: true,
@@ -83,9 +89,18 @@ export class ProductsService {
           id: category ? category : undefined,
         },
         title: defaultQuery.search ? Like(`%${defaultQuery.search}%`) : null,
+        price:
+          productFilters.priceMin && productFilters.priceMax
+            ? Between(productFilters.priceMin, productFilters.priceMax)
+            : undefined,
       },
       order: {
-        price: defaultQuery.ordering,
+        price:
+          productFilters.ordering === ProductsOrderig.PRICE_ACS
+            ? 'ASC'
+            : productFilters.ordering === ProductsOrderig.PRICE_DESC
+            ? 'DESC'
+            : undefined,
       },
       skip: defaultQuery.skip,
       take: defaultQuery.page_size,

@@ -1,22 +1,12 @@
 import MdiChevronDown from '@/assets/icons/ChevronLightIcon';
 import { useRest } from '@/services';
 import { Category } from '@/services/products/types';
+import { useShopStore } from '@/store/shopStore';
 import { useEffect, useState } from 'react';
 
 export default function ShopPageFilterCategories() {
-  const api = useRest();
-
-  const [categories, setCategories] = useState<Category[]>([]);
+  const { categories } = useShopStore();
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-
-  async function getCategories() {
-    const response = await api.products.getCategories();
-    setCategories(response.results);
-  }
-
-  useEffect(() => {
-    getCategories();
-  }, []);
   return (
     <div className="rounded-md bg-gray-100 p-5">
       <h1

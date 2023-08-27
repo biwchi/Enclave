@@ -9,6 +9,19 @@ export type Product = {
   create_at: Date;
 };
 
+export type CreateProduct = {
+  title: string;
+  description: string;
+  price: number;
+  category:
+    | {
+        title: string;
+        value: number;
+      }
+    | number;
+  imageUrl: string;
+};
+
 export type Category = {
   id: number;
   title: string;

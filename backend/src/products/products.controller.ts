@@ -20,6 +20,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { DefaultQuery } from 'src/common/dto/defaultQuery.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import productFilters from './dto/product-filters.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -36,7 +37,7 @@ export class ProductsController {
   @Post('category')
   createCategory(
     @Body() createCategoryDto: CreateCategoryDto,
-    @Query('sub') sub?: boolean,  
+    @Query('sub') sub?: boolean,
   ) {
     return this.productsService.createCategory(createCategoryDto, sub);
   }
@@ -45,8 +46,9 @@ export class ProductsController {
   findAll(
     @Query() defaultQuery: DefaultQuery,
     @Query('category') category?: number,
+    @Query() productFIlters?: productFilters,
   ) {
-    return this.productsService.findAll(defaultQuery, category);
+    return this.productsService.findAll(defaultQuery, category, productFIlters);
   }
 
   @Get('category')

@@ -1,14 +1,15 @@
 import { AxiosInstance } from 'axios';
 import { BaseRest } from '../base';
 import { ApiParams, DefaultResponse } from '../types';
-import { Category, Product } from './types';
+import { Category, CreateProduct, Product } from './types';
+import { ShopFilters } from '@/store/shopStore';
 
 export class ProductsRest extends BaseRest {
   constructor(endpoint: AxiosInstance) {
     super(endpoint);
   }
 
-  public getProducts(params?: ApiParams) {
+  public getProducts(params?: ApiParams & ShopFilters) {
     return this.get<DefaultResponse<Product>>('products', { params });
   }
 
@@ -20,7 +21,7 @@ export class ProductsRest extends BaseRest {
     return this.get<Product>(`products/${id}`, { params });
   }
 
-  public postProduct(data: object, params: ApiParams) {
+  public postProduct(data: CreateProduct, params?: ApiParams) {
     return this.post<Product>('products', data, { params });
   }
 
