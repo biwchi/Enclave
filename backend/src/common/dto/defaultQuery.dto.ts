@@ -9,7 +9,7 @@ export class DefaultQuery {
   readonly page?: number = 1;
 
   @Type(() => Number)
-  @Max(50)
+  @Max(60)
   @Min(1)
   @IsInt()
   @IsOptional()

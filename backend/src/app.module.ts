@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module';
 import { BlogModule } from './blog/blog.module';
 import { ContactModule } from './contact/contact.module';
 import { AuthModule } from './auth/auth.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { AuthModule } from './auth/auth.module';
     BlogModule,
     ContactModule,
     AuthModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -38,7 +38,7 @@ export default function ShopPageFilters() {
         <ShopPageFilter
           showItemLength={5}
           selected={filters.rating}
-          onSelect={(option) => setFilters({ rating: Number(option) })}
+          onSelect={(option) => setFilters({ rating: option ? Number(option) : undefined })}
           title="Rating"
           options={[5, 4, 3, 2, 1]}
         />

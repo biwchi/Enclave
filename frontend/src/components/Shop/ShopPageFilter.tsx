@@ -8,7 +8,7 @@ type ShopPageFilterProps = {
   selected: Option | Option[] | undefined;
   options: Option[];
   showItemLength?: number;
-  onSelect: (option: Option) => void;
+  onSelect: (option: Option | undefined) => void;
 };
 
 export default function ShopPageFilter({
@@ -54,7 +54,7 @@ export default function ShopPageFilter({
           return (
             <li
               ref={optionRef}
-              onClick={() => onSelect(option)}
+              onClick={() => (checkSelected(option) ? onSelect(undefined) : onSelect(option))}
               className="-ml-2.5 flex cursor-pointer items-center gap-3 rounded-md p-2.5 text-sm text-gray-700 hover:bg-gray-100">
               <div
                 className={

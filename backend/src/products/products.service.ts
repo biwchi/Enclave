@@ -89,6 +89,9 @@ export class ProductsService {
           id: category ? category : undefined,
         },
         title: defaultQuery.search ? Like(`%${defaultQuery.search}%`) : null,
+        rating:
+          productFilters.rating &&
+          Between(productFilters.rating, productFilters.rating + 0.99),
         price:
           productFilters.priceMin && productFilters.priceMax
             ? Between(productFilters.priceMin, productFilters.priceMax)

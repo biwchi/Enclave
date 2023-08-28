@@ -6,28 +6,28 @@ import { useOnClickOutside } from 'usehooks-ts';
 
 export type Option = ItemTitleValue | string | number;
 
-type CustomSelectProps = {
-  selected?: Option;
+type CustomSelectProps<T> = {
+  selected?: T;
   placeholder?: string;
-  options: Option[];
+  options: T[];
   name?: string;
   label?: string;
   rouneded?: boolean;
-  onSelect?: (option: Option) => void;
+  onSelect?: (option: T) => void;
 };
 
-export default function CustomSelect({
+export default function CustomSelect<T>({
   placeholder,
   selected,
   options,
   label,
   onSelect,
   rouneded = false
-}: CustomSelectProps) {
+}: CustomSelectProps<T>) {
   const [opened, setOpened] = useState(false);
   const selectRef = useRef<HTMLDivElement | null>(null);
 
-  function select(option: Option) {
+  function select(option: T) {
     onSelect && onSelect(option);
     setOpened(false);
   }
@@ -82,8 +82,10 @@ export default function CustomSelect({
   );
 }
 
-export function defineTitle(option: Option | undefined) {
-  if (option === undefined) return '';
-  if (typeof option === 'object') return option.title;
-  else return option.toString();
+export function defineTitle<T = Option>(option: T | undefined) {
+  if (!option) return '';
+  if (typeof option === 'object') {
+    if ('title' in option) return option.title as string;
+  } else return option.toString();
+  return '';
 }

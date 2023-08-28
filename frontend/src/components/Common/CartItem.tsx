@@ -1,15 +1,17 @@
 import CartIcon from '@/assets/icons/CartIcon';
 import NoImageIcon from '@/assets/icons/NoImageIcon';
 import FavoriteIcon from '@/assets/icons/favoriteIcon';
+import { Review } from '@/services/products/types';
 
 export type CartItemProps = {
   category: string;
   title: string;
   imageUrl: string | null;
   price: number;
+  reviewsCount: number;
   inWishlist: boolean;
   inCart: boolean;
-  rating?: number;
+  rating?: string | null;
   id: string;
   description?: string;
 };

@@ -12,9 +12,10 @@ export default function CartItemRow({
   inCart,
   inWishlist,
   imageUrl,
+  reviewsCount,
   category,
   id,
-  rating = 0
+  rating = '0'
 }: CartItemProps) {
   return (
     <div className="grid grid-cols-[0.3fr,1fr,0.3fr] border border-solid border-gray-100 p-5">
@@ -30,7 +31,7 @@ export default function CartItemRow({
           className="block cursor-pointer py-5 font-medium text-primary-700  underline-offset-1 hover:underline">
           {title}
         </Link>
-        <RatingStart reviewsCount={203} rating={rating} />
+        <RatingStart reviewsCount={reviewsCount} rating={rating ? Number(rating) : 0} />
         <p className="pt-5 text-sm text-gray-700">{description}</p>
       </div>
       <div className="self-center">

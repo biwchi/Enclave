@@ -14,7 +14,7 @@ type ShopPageHeaderProps = {
   changeMode: (mode: 'grid' | 'rows') => void;
 };
 
-const sorting: ItemTitleValue[] = [
+const sorting: ItemTitleValue<ProductsOrderig>[] = [
   {
     title: 'Price ascending',
     value: ProductsOrderig.PRICE_ACS
@@ -24,8 +24,8 @@ const sorting: ItemTitleValue[] = [
     value: ProductsOrderig.PRICE_DESC
   },
   {
-    title: 'Popular',
-    value: ProductsOrderig.POPUlAR
+    title: 'Rating',
+    value: ProductsOrderig.RATING
   }
 ];
 const productPerPage = [20, 40, 60];
@@ -37,7 +37,6 @@ export default function ShopPageHeader({
   changeMode
 }: ShopPageHeaderProps) {
   const { filters, setFilters } = useShopStore();
-  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   return (
     <div className="rounded-md border border-solid border-gray-100 p-5">
@@ -45,7 +44,7 @@ export default function ShopPageHeader({
         <h1 className="text-3xl font-medium">{title}</h1>
         <div>
           <span className="text-gray-700">Showing</span>
-          <b className="px-1">1-20</b>
+          <b className="px-1">1-{filters.page_size}</b>
           <span className="text-gray-700">of</span>
           <b className="px-1">{productsCount}</b>
         </div>
@@ -66,14 +65,16 @@ export default function ShopPageHeader({
         </div>
         <div className="flex gap-2">
           <CustomSelect
-            selected={filters.ordering}
-            onSelect={(ordering) => setFilters({ ordering })}
+            selected={sorting.find((sort) => sort.value === filters.ordering)}
+            onSelect={(ordering) =>
+              setFilters({ ordering: ordering.value })
+            }
             options={sorting}
             rouneded
           />
           <CustomSelect
-            selected={itemsPerPage}
-            onSelect={(value) => setItemsPerPage(value)}
+            selected={filters.page_size}
+            onSelect={(value) => setFilters({ page_size: value ? Number(value) : 20 })}
             options={productPerPage}
             rouneded
           />

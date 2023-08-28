@@ -1,15 +1,15 @@
 import { ProductsOrderig } from '@/constants/enums';
 import { Category, Product } from '@/services/products/types';
-import { ItemTitleValue, Ordering, ResponseMeta } from '@/services/types';
+import { ApiParams, ItemTitleValue, Ordering, ResponseMeta } from '@/services/types';
 import { create } from 'zustand';
 
 export type ShopFilters = {
   priceMin?: number;
   priceMax?: number;
-  brand?: ItemTitleValue;
+  brand?: ItemTitleValue | string;
   rating?: number;
-  ordering: ProductsOrderig;
-};
+  ordering?: ProductsOrderig;
+} & ApiParams;
 
 type ShopStore = {
   products: Product[];
@@ -33,7 +33,8 @@ export const useShopStore = create<ShopStore>()((set) => ({
     page_size: 0
   },
   filters: {
-    ordering: ProductsOrderig.POPUlAR
+    page_size: 20,
+    ordering: ProductsOrderig.RATING
   },
 
   setCategories: (categories) =>

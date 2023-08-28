@@ -7,7 +7,6 @@ export type ApiParams = {
   page?: number;
   page_size?: number;
   search?: string;
-  ordering?: Ordering;
 };
 
 export type ResponseMeta = {
@@ -24,7 +23,7 @@ export type DefaultResponse<T> = {
   results: T[];
 };
 
-export type ItemTitleValue = {
+export type ItemTitleValue<T = string | number> = {
   title: string;
-  value: string | number;
+  value: T;
 };

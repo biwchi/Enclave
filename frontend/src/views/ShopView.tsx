@@ -20,7 +20,11 @@ export default function ShopView() {
   async function get() {
     try {
       setLoading(true);
-      const response = await api.products.getProducts({ ...filters, brand: filters.brand?.value });
+      const brand = typeof filters.brand === 'object' ? String(filters.brand.value) : filters.brand;
+      const response = await api.products.getProducts({
+        ...filters,
+        brand
+      });
       setProducts(response.results, response.meta);
     } catch (error) {
       console.error(error);
@@ -56,6 +60,7 @@ export default function ShopView() {
             if (viewMode === 'grid') {
               return (
                 <CartItem
+                  reviewsCount={product.reviewCount}
                   id={product.id}
                   category={product.category.title}
                   title={product.title}
@@ -68,13 +73,14 @@ export default function ShopView() {
             } else {
               return (
                 <CartItemRow
+                  reviewsCount={product.reviewCount}
                   id={product.id}
                   category={product.category.title}
                   title={product.title}
                   imageUrl={product.imageUrl}
                   price={product.price}
                   description={product.description}
-                  rating={3.4}
+                  rating={product.rating}
                   inWishlist={true}
                   inCart={false}
                 />
