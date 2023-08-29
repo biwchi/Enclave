@@ -21,7 +21,7 @@ export class Review {
   @Column({ nullable: true })
   review?: string;
 
-  @OneToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.id)
   @JoinColumn()
   user: User;
 

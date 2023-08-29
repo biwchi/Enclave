@@ -4,16 +4,13 @@ import FavoriteIcon from '@/assets/icons/favoriteIcon';
 import { Review } from '@/services/products/types';
 
 export type CartItemProps = {
+  id: string;
   category: string;
   title: string;
   imageUrl: string | null;
   price: number;
-  reviewsCount: number;
   inWishlist: boolean;
   inCart: boolean;
-  rating?: string | null;
-  id: string;
-  description?: string;
 };
 
 export default function CartItem({

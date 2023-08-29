@@ -5,7 +5,15 @@ import {
 } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Between, Like, Repository } from 'typeorm';
+import {
+  Between,
+  FindOptionsOrder,
+  Like,
+  QueryBuilder,
+  Repository,
+  SelectQueryBuilder,
+  getManager,
+} from 'typeorm';
 import { Product } from './entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
@@ -15,7 +23,7 @@ import { DefaultResponse } from 'src/common/dto/defaultResponse.dto';
 import { DefaultMetaResponse } from 'src/common/dto/defaultMetaResponse.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { SubCategory } from './entities/subCategory.entity';
-import productFilters from './dto/product-filters.dto';
+import { ProductFilters } from './dto/product-filters.dto';
 import { ProductsOrderig } from './constants';
 
 @Injectable()
@@ -76,35 +84,48 @@ export class ProductsService {
 
   public async findAll(
     defaultQuery: DefaultQuery,
-    category?: number,
-    productFilters?: productFilters,
+    productFilters?: ProductFilters,
   ) {
+    const ordering: FindOptionsOrder<Product> = {
+      reviewCount:
+        productFilters.ordering === ProductsOrderig.POPUlAR
+          ? 'DESC'
+          : undefined,
+      rating:
+        productFilters.ordering === ProductsOrderig.RATING ||
+        productFilters.ordering === ProductsOrderig.POPUlAR
+          ? 'DESC'
+          : undefined,
+      price:
+        productFilters.ordering === ProductsOrderig.PRICE_ACS
+          ? 'ASC'
+          : productFilters.ordering === ProductsOrderig.PRICE_DESC
+          ? 'DESC'
+          : undefined,
+    };
+
     const [products, itemCount] = await this.productRepository.findAndCount({
       relations: {
         category: true,
         subCategory: true,
       },
       where: {
+        subCategory: {
+          id: productFilters.subCategory,
+        },
         category: {
-          id: category ? category : undefined,
+          id: productFilters.category,
         },
         title: defaultQuery.search ? Like(`%${defaultQuery.search}%`) : null,
         rating:
           productFilters.rating &&
-          Between(productFilters.rating, productFilters.rating + 0.99),
+          Between(productFilters.rating - 0.99, productFilters.rating - 0.01),
         price:
           productFilters.priceMin && productFilters.priceMax
             ? Between(productFilters.priceMin, productFilters.priceMax)
             : undefined,
       },
-      order: {
-        price:
-          productFilters.ordering === ProductsOrderig.PRICE_ACS
-            ? 'ASC'
-            : productFilters.ordering === ProductsOrderig.PRICE_DESC
-            ? 'DESC'
-            : undefined,
-      },
+      order: ordering,
       skip: defaultQuery.skip,
       take: defaultQuery.page_size,
     });

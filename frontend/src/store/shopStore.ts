@@ -8,6 +8,8 @@ export type ShopFilters = {
   priceMax?: number;
   brand?: ItemTitleValue | string;
   rating?: number;
+  category?: number;
+  subCategory?: number;
   ordering?: ProductsOrderig;
 } & ApiParams;
 

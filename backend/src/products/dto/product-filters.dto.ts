@@ -3,7 +3,7 @@ import { IsInt, IsOptional, Max, Min } from 'class-validator';
 import { Ordering } from 'src/common/constant/Ordering';
 import { ProductsOrderig } from '../constants';
 
-export default class productFilters {
+export class ProductFilters {
   @Type(() => Number)
   @IsInt()
   @Min(0)
@@ -25,6 +25,16 @@ export default class productFilters {
   @Min(1)
   @Max(5)
   rating?: number;
+
+  @Type(() => Number)
+  @IsInt()
+  @IsOptional()
+  category?: number;
+
+  @Type(() => Number)
+  @IsInt()
+  @IsOptional()
+  subCategory?: number;
 
   @IsOptional()
   ordering?: ProductsOrderig;

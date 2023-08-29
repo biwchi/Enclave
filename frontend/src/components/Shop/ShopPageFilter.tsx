@@ -2,28 +2,32 @@ import MdiChevronDown from '@/assets/icons/ChevronLightIcon';
 import { Option, defineTitle } from '../UI/CustomSelect';
 import CheckIcon from '@/assets/icons/CheckIcon';
 import { useEffect, useRef, useState } from 'react';
+import FillStarIcon from '@/assets/icons/stars/FillStarIcon';
+import EmptyStarIcon from '@/assets/icons/stars/EmptyStarIcon';
 
-type ShopPageFilterProps = {
+type ShopPageFilterProps<T> = {
   title: string;
-  selected: Option | Option[] | undefined;
-  options: Option[];
+  selected: T | T[] | undefined;
+  options: T[];
   showItemLength?: number;
-  onSelect: (option: Option | undefined) => void;
+  ratingStart?: boolean;
+  onSelect: (option: T | undefined) => void;
 };
 
-export default function ShopPageFilter({
+export default function ShopPageFilter<T>({
   title,
   selected,
   options,
+  ratingStart = false,
   showItemLength = 4,
   onSelect
-}: ShopPageFilterProps) {
+}: ShopPageFilterProps<T>) {
   const [opened, setOpened] = useState(false);
   const optionsRef = useRef<HTMLUListElement | null>(null);
   const optionRef = useRef<HTMLLIElement | null>(null);
   const defaultShowCount = options.length <= showItemLength ? options.length : showItemLength;
 
-  function checkSelected(option: Option) {
+  function checkSelected(option: T) {
     if (typeof selected === 'object') {
       if (Array.isArray(selected)) {
         return selected.find((item) => JSON.stringify(item) === JSON.stringify(option));
@@ -64,7 +68,11 @@ export default function ShopPageFilter({
                   <CheckIcon className="absolute text-gray-700" width={18} height={18} />
                 )}
               </div>
-              <p>{defineTitle(option)}</p>
+              <p className="flex items-center">
+                {ratingStart && typeof option === 'number'
+                  ? getRatingStar(option)
+                  : defineTitle(option)}
+              </p>
             </li>
           );
         })}
@@ -79,6 +87,21 @@ export default function ShopPageFilter({
             <MdiChevronDown />
           </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+function getRatingStar(option: number) {
+  const starCount = 5;
+  return (
+    <div className="flex items-center justify-center gap-1">
+      {Array.from({ length: starCount }).map((_item, idx) =>
+        idx + 1 <= option ? (
+          <FillStarIcon className="text-warning-500" width={20} height={20} />
+        ) : (
+          <EmptyStarIcon className="text-gray-400" width={20} height={20} />
+        )
       )}
     </div>
   );

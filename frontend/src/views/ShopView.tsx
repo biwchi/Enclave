@@ -60,7 +60,6 @@ export default function ShopView() {
             if (viewMode === 'grid') {
               return (
                 <CartItem
-                  reviewsCount={product.reviewCount}
                   id={product.id}
                   category={product.category.title}
                   title={product.title}
@@ -81,6 +80,7 @@ export default function ShopView() {
                   price={product.price}
                   description={product.description}
                   rating={product.rating}
+                  subCategory={product.subCategory}
                   inWishlist={true}
                   inCart={false}
                 />

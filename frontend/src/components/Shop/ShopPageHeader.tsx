@@ -26,7 +26,8 @@ const sorting: ItemTitleValue<ProductsOrderig>[] = [
   {
     title: 'Rating',
     value: ProductsOrderig.RATING
-  }
+  },
+  { title: 'Popular', value: ProductsOrderig.POPULAR }
 ];
 const productPerPage = [20, 40, 60];
 
@@ -66,9 +67,7 @@ export default function ShopPageHeader({
         <div className="flex gap-2">
           <CustomSelect
             selected={sorting.find((sort) => sort.value === filters.ordering)}
-            onSelect={(ordering) =>
-              setFilters({ ordering: ordering.value })
-            }
+            onSelect={(ordering) => setFilters({ ordering: ordering.value })}
             options={sorting}
             rouneded
           />

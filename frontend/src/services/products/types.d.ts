@@ -4,11 +4,12 @@ export type Product = {
   description: string;
   imageUrl: string | null;
   price: number;
-  rating: string | null;
+  rating: number;
   reviewCount: number;
   category: Category;
   updated_at: Date;
   create_at: Date;
+  subCategory: SubCategory;
 };
 
 export type Review = {
@@ -39,5 +40,7 @@ export type Category = {
   id: number;
   title: string;
   totalProducts: number;
-  subCategories: { id: number; title: string; totalProducts: number }[];
+  subCategories: SubCategory[];
 };
+
+export type SubCategory = { id: number; title: string; totalProducts: number };

@@ -19,6 +19,7 @@ import {
 import { Category } from './category.entity';
 import { SubCategory } from './subCategory.entity';
 import { Review } from 'src/review/entities/review.entity';
+import { Transform } from 'class-transformer';
 
 @Entity()
 export class Product {
@@ -34,18 +35,29 @@ export class Product {
   @Column()
   price: number;
 
-  @VirtualColumn({
+  @Column({
     type: 'float4',
-    query: (alias) =>
-      `SELECT AVG(rating) FROM review WHERE "productId" = ${alias}.id`,
+    nullable: true,
   })
   rating: number;
+
+  @Column({
+    nullable: true,
+  })
+  reviewCount: number;
+
+  @VirtualColumn({
+    type: 'double',
+    query: (alias) =>
+      `SELECT CAST(AVG(rating) AS DECIMAL (12,2)) FROM review WHERE "productId" = ${alias}.id`,
+  })
+  ratingVirtual: number;
 
   @VirtualColumn({
     query: (alias) =>
       `SELECT COUNT(*) FROM review WHERE "productId" = ${alias}.id`,
   })
-  reviewCount: number;
+  reviewCountVirtual: number;
 
   @Column()
   imageUrl: string;
