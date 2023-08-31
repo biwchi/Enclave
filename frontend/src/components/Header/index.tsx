@@ -13,6 +13,8 @@ import { useOnClickOutside } from 'usehooks-ts';
 import Accordion from '../UI/Accordion';
 import CategoriesDropDown from './CategoriesDropDown';
 import CategoriesNavBar from './CategorigesNavBar';
+import Modal from '../Modal';
+import AuthModal from '../Auth/AuthModal';
 
 const options = ['All categories', 'Smartphone', 'Laptop', 'TV', 'PC'];
 
@@ -44,6 +46,7 @@ export default function SearchBar() {
 
   const [isSideBar, setIsSideBar] = useState(false);
   const [selected, setSelected] = useState(-1);
+  const [isAuth, setIsAuth] = useState(false);
 
   function openDropDown(event: MouseEvent<HTMLDivElement>, idx: number) {
     if (!dropDown.current) return;
@@ -83,6 +86,7 @@ export default function SearchBar() {
         <Search />
         <div className="flex gap-8">
           <IconButton
+            onClick={() => setIsAuth(true)}
             title="My profile"
             icon={<UserIcon className="text-gray-700" width={24} height={24} />}
           />
@@ -97,6 +101,12 @@ export default function SearchBar() {
           />
         </div>
       </div>
+      <Modal
+        modalTitle="Create account"
+        opened={isAuth}
+        closeModal={() => setIsAuth(false)}
+        modalContent={<AuthModal />}
+      />
       <CategoriesNavBar
         selected={selected}
         onLeave={() => setSelected(-1)}
@@ -139,7 +149,7 @@ function Search() {
           <SearchIcon className="text-white" height={20} width={20} />
         </button>
       </div>
-    </div>  
+    </div>
   );
 }
 

@@ -19,11 +19,11 @@ export default function Modal({ opened, modalTitle, modalContent, closeModal }: 
       {opened &&
         createPortal(
           <div className="fixed left-0 top-0 z-[999999] flex h-full w-full items-center justify-center bg-black/20">
-            <div ref={modal} className="min-w-[30rem] rounded-3xl bg-white p-5   shadow-md">
+            <div ref={modal} className="min-w-[32rem] rounded-3xl bg-white p-7   shadow-md">
               <div className="flex items-center justify-between">
-                <h1>{modalTitle}</h1>
+                <h1 className="text-xl font-medium">{modalTitle}</h1>
                 <div
-                  className="cursor-pointer rounded-full bg-primary-600 p-2"
+                  className="cursor-pointer rounded-full bg-primary-600 p-2 transition hover:bg-primary-700"
                   onClick={closeModal}>
                   <CloseIcon className="text-white" width={25} height={25} />
                 </div>

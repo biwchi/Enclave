@@ -1,4 +1,3 @@
-import { useField } from 'formik';
 import { InputHTMLAttributes } from 'react';
 
 interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -12,9 +11,8 @@ export default function CustomInput({ label, ...inputProps }: CustomInputProps) 
       <input
         {...inputProps}
         className={
-          'w-full rounded-3xl border border-solid border-gray-200 bg-white px-5 py-3 placeholder:text-sm placeholder:text-gray-600 '
+          'w-full rounded-3xl border border-solid border-gray-200 bg-white px-5  py-3 ring-primary-600 transition placeholder:text-sm placeholder:text-gray-600 focus:ring-2 '
         }
-        type="text"
       />
     </div>
   );
