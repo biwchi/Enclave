@@ -5,7 +5,7 @@ export default function Layout() {
   return (
     <>
       <Header />
-      <div className="max-w-[1400px] mt-10 px-4 m-auto">
+      <div className="m-auto mt-10 max-w-[1400px] px-4">
         <Outlet />
       </div>
     </>

@@ -1,52 +1,31 @@
 import LogoIcon from '@/assets/icons/LogoIcon';
-import CustomSelect, { Option } from '../UI/CustomSelect';
-import { MouseEvent, useRef, useState } from 'react';
+import CustomSelect from '../UI/CustomSelect';
 import SearchIcon from '@/assets/icons/SearchIcon';
 import IconButton from '../UI/IconButton';
 import UserIcon from '@/assets/icons/UserIcon';
 import FavoriteIcon from '@/assets/icons/favoriteIcon';
 import CartIcon from '@/assets/icons/CartIcon';
-import BurgerMenuIcon from '@/assets/icons/BurgerMenuIcon';
-import { createPortal } from 'react-dom';
-import CloseIcon from '@/assets/icons/CloseIcon';
-import { useOnClickOutside } from 'usehooks-ts';
-import Accordion from '../UI/Accordion';
-import CategoriesDropDown from './CategoriesDropDown';
-import CategoriesNavBar from './CategorigesNavBar';
+import CategoriesDropDown from './HeaderCategoriesDropDown';
+import CategoriesNavBar from './HeaderCategorigesNavBar';
 import Modal from '../Modal';
 import AuthModal from '../Auth/AuthModal';
 
-const options = ['All categories', 'Smartphone', 'Laptop', 'TV', 'PC'];
-
-const categories = [
-  {
-    title: options[0],
-    items: options.map((opt, idx) => ({ id: idx, title: opt }))
-  },
-  {
-    title: options[1],
-    items: options.map((opt, idx) => ({ id: idx, title: opt }))
-  },
-  {
-    title: options[2],
-    items: options.map((opt, idx) => ({ id: idx, title: opt }))
-  },
-  {
-    title: options[3],
-    items: options.map((opt, idx) => ({ id: idx, title: opt }))
-  },
-  {
-    title: options[1],
-    items: options.map((opt, idx) => ({ id: idx, title: opt }))
-  }
-];
+import { MouseEvent, useRef, useState } from 'react';
+import { useShopStore } from '@/store/shopStore';
+import { Category } from '@/services/products/types';
+import CustomButton from '../UI/CustomButton';
+import { useAuthListener } from '@/hooks';
+import { useLocalStorage } from 'usehooks-ts';
 
 export default function SearchBar() {
   const dropDown = useRef<HTMLDivElement | null>(null);
 
-  const [isSideBar, setIsSideBar] = useState(false);
+  const { categories } = useShopStore();
+  const { isLoggedIn, setIsLoggedIn } = useAuthListener();
+
   const [selected, setSelected] = useState(-1);
-  const [isAuth, setIsAuth] = useState(false);
+  const [authModal, setAuthModal] = useState(false);
+  const [_accessToken, setAccessToken] = useLocalStorage('access_token', '');
 
   function openDropDown(event: MouseEvent<HTMLDivElement>, idx: number) {
     if (!dropDown.current) return;
@@ -62,7 +41,7 @@ export default function SearchBar() {
       return;
     }
     if (position + dropDownRect.width > window.innerWidth) {
-      dropDown.current.style.left = `${window.innerWidth - dropDownRect.width}px`;
+      dropDown.current.style.left = `${window.innerWidth - dropDownRect.width - 20}px`;
       return;
     }
 
@@ -71,40 +50,44 @@ export default function SearchBar() {
   return (
     <div className="relative">
       <div className="m-auto flex max-w-[1400px] items-center justify-between py-5">
-        <div className="flex items-center gap-6">
-          <IconButton
-            onClick={() => setIsSideBar(true)}
-            className="mt-2"
-            icon={<BurgerMenuIcon width={24} height={24} />}
-          />
-          {createPortal(
-            <SideBarMenu opened={isSideBar} closeSideBar={() => setIsSideBar(false)} />,
-            document.getElementById('root')!
-          )}
+        <div>
           <LogoIcon />
         </div>
         <Search />
-        <div className="flex gap-8">
-          <IconButton
-            onClick={() => setIsAuth(true)}
-            title="My profile"
-            icon={<UserIcon className="text-gray-700" width={24} height={24} />}
-          />
-          <IconButton
-            title="Wishlist"
-            icon={<FavoriteIcon className="text-gray-700" width={24} height={24} />}
-          />
-          <IconButton
-            title="My cart"
-            text="$0.00"
-            icon={<CartIcon className="text-gray-700" width={24} height={24} />}
-          />
-        </div>
+        {isLoggedIn ? (
+          <div className="flex gap-8">
+            <IconButton
+              title="My profile"
+              icon={<UserIcon className="text-gray-700" width={24} height={24} />}
+            />
+            <IconButton
+              title="Wishlist"
+              icon={<FavoriteIcon className="text-gray-700" width={24} height={24} />}
+            />
+            <IconButton
+              title="My cart"
+              text="$0.00"
+              icon={<CartIcon className="text-gray-700" width={24} height={24} />}
+            />
+            <IconButton
+              onClick={() => {
+                setIsLoggedIn(false);
+                setAccessToken('');
+              }}
+              title="Login out"
+              icon={<CartIcon className="text-gray-700" width={24} height={24} />}
+            />
+          </div>
+        ) : (
+          <div>
+            <CustomButton onClick={() => setAuthModal(true)} text="Sign up" />
+          </div>
+        )}
       </div>
       <Modal
         modalTitle="Create account"
-        opened={isAuth}
-        closeModal={() => setIsAuth(false)}
+        opened={authModal}
+        closeModal={() => setAuthModal(false)}
         modalContent={<AuthModal />}
       />
       <CategoriesNavBar
@@ -127,7 +110,8 @@ export default function SearchBar() {
 }
 
 function Search() {
-  const [searchField, setSearchField] = useState<Option>('All categories');
+  const { categories } = useShopStore();
+  const [searchCategory, setSearchCategory] = useState<Category | undefined>(undefined);
   return (
     <div className="flex w-full max-w-4xl rounded-full ring-2 ring-primary-600">
       <input
@@ -138,65 +122,16 @@ function Search() {
       <div className="flex items-center">
         <div className="mr-2 h-[70%] w-0.5 bg-gray-200"></div>
         <CustomSelect
-          selected={searchField}
+          selected={searchCategory}
           placeholder="All categories"
-          options={options}
-          onSelect={(opt) => setSearchField(opt)}
+          options={categories}
+          onSelect={(opt) => setSearchCategory(opt)}
         />
       </div>
       <div className="aspect-square h-[3.1rem]">
         <button className="flex h-full w-full items-center justify-center rounded-br-full rounded-tr-full bg-primary-600 transition hover:bg-primary-700">
           <SearchIcon className="text-white" height={20} width={20} />
         </button>
-      </div>
-    </div>
-  );
-}
-
-type SideBarMenuProps = {
-  opened: boolean;
-  closeSideBar: () => void;
-};
-
-function SideBarMenu({ opened, closeSideBar }: SideBarMenuProps) {
-  const sideBar = useRef(null);
-  const [dropDown, setDropDown] = useState(-1);
-
-  function openDropDown(idx: number) {
-    setDropDown(() => (idx === dropDown ? -1 : idx));
-  }
-
-  useOnClickOutside(sideBar, () => closeSideBar());
-  return (
-    <div
-      ref={sideBar}
-      className={'absolute z-[10000] flex h-full ' + (opened ? 'visible' : 'invisible')}>
-      <div
-        className={
-          'w-72 overflow-auto bg-white pt-14 transition ' +
-          (opened ? 'translate-x-0 shadow-2xl' : '-translate-x-full')
-        }>
-        <div className="flex items-center justify-between px-7">
-          <h1 className="text-2xl font-semibold">Welcome!</h1>
-          <IconButton onClick={closeSideBar} icon={<CloseIcon width={24} height={24} />} />
-        </div>
-
-        <div className="mt-8 flex flex-col">
-          {options.map((option, idx) => {
-            return (
-              <div
-                key={idx}
-                className="relative border-b border-solid border-gray-200 last:border-none">
-                <Accordion
-                  isOpened={dropDown === idx}
-                  onOpen={() => openDropDown(idx)}
-                  title={option}
-                  items={options}
-                />
-              </div>
-            );
-          })}
-        </div>
       </div>
     </div>
   );

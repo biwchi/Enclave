@@ -56,10 +56,11 @@ export default function ShopView() {
               <Loader />
             </div>
           )}
-          {products.map((product) => {
+          {products.map((product, idx) => {
             if (viewMode === 'grid') {
               return (
                 <CartItem
+                  key={idx}
                   id={product.id}
                   category={product.category.title}
                   title={product.title}
@@ -72,6 +73,7 @@ export default function ShopView() {
             } else {
               return (
                 <CartItemRow
+                  key={idx}
                   reviewsCount={product.reviewCount}
                   id={product.id}
                   category={product.category.title}

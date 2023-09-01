@@ -72,9 +72,10 @@ function SubCategories({
           }>
           <h1 className="py-3.5 pl-2 font-medium">Subcategories</h1>
           <ul>
-            {selectedCategory.subCategories.map((category) => {
+            {selectedCategory.subCategories.map((category, idx) => {
               return (
                 <li
+                  key={idx}
                   onClick={() => selectSub(category.id === selectedSub ? undefined : category)}
                   className={
                     'cursor-pointer rounded-md px-2.5 py-2.5 text-sm text-gray-700 last:pt-2.5 ' +
