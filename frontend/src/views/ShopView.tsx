@@ -62,7 +62,7 @@ export default function ShopView() {
                 <CartItem
                   key={idx}
                   id={product.id}
-                  category={product.category.title}
+                  category={product.category}
                   title={product.title}
                   imageUrl={product.imageUrl}
                   price={product.price}
@@ -76,7 +76,7 @@ export default function ShopView() {
                   key={idx}
                   reviewsCount={product.reviewCount}
                   id={product.id}
-                  category={product.category.title}
+                  category={product.category}
                   title={product.title}
                   imageUrl={product.imageUrl}
                   price={product.price}

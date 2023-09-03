@@ -16,7 +16,7 @@ export class BaseRest {
     return BaseRest.extractData<T>(this.endpoint.delete(url, config));
   }
 
-  protected post<T>(url: string, data: object, config?: AxiosRequestConfig) {
+  protected post<T>(url: string, data?: object, config?: AxiosRequestConfig) {
     return BaseRest.extractData<T>(this.endpoint.post(url, data, config));
   }
 

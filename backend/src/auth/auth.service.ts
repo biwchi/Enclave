@@ -22,7 +22,7 @@ export class AuthService {
       return user;
     }
 
-    throw new BadRequestException('User or password are incorrect');
+    throw new BadRequestException('Email or password are incorrect');
   }
 
   async login(user: IUser) {

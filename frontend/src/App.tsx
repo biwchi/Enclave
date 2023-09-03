@@ -1,21 +1,55 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Router } from './router';
 import { useShopStore } from './store/shopStore';
 import { useRest } from './services';
+import { useAuthStore } from './store/authStore';
+
+import Loader from './components/Common/Loader';
 
 function App() {
   const api = useRest();
+
   const { setCategories } = useShopStore();
+  const { isLoggedIn, setIsLoggedIn, setUser } = useAuthStore();
+
+  const [isLoading, setIsLoading] = useState(true);
 
   async function getCategories() {
     const response = await api.products.getCategories();
     setCategories(response.results);
   }
 
+  async function init() {
+    try {
+      const currentUser = await api.user.getCurrentUser();
+
+      setIsLoggedIn(true);
+      setUser(currentUser);
+    } catch (error) {
+      setIsLoggedIn(false);
+      setUser({ id: '', username: '', email: '', createdAt: new Date() });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      init();
+    }
+  }, [isLoggedIn]);
+
   useEffect(() => {
     getCategories();
   }, []);
-  return <Router />;
+
+  return isLoading ? (
+    <div className="flex h-screen w-screen items-center justify-center">
+      <Loader />
+    </div>
+  ) : (
+    <Router />
+  );
 }
 
 export default App;

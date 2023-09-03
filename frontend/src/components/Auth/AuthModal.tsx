@@ -6,14 +6,13 @@ import { useFormik } from 'formik';
 import { Login, Register } from '@/services/user/types';
 import { useAuthStore } from '@/store/authStore';
 import { useLocalStorage } from 'usehooks-ts';
-import { useAuthListener } from '@/hooks';
+import { AxiosError } from 'axios';
 
 type Auth = Login & Register;
 
 export default function AuthModal() {
   const api = useRest();
-  const { setIsLoggedIn } = useAuthListener();
-  const { user, setUser } = useAuthStore();
+  const { setIsLoggedIn, setUser } = useAuthStore();
   const [isLogin, setIsLogin] = useState(false);
   const [_accessToken, setAccessToken] = useLocalStorage('access_token', '');
 
@@ -34,7 +33,13 @@ export default function AuthModal() {
       const { access_token } = await api.user.login(values);
       setAccessToken(access_token);
       setIsLoggedIn(true);
-    } catch (error) {}
+    } catch (error) {
+      const { response } = error as AxiosError<{ message: string | string[] }>;
+
+      if (response?.data.message === 'User or password are incorrect') {
+        formik.setFieldError('email', 'User or password are incorrect');
+      }
+    }
   }
 
   async function register(values: Register) {
@@ -42,8 +47,15 @@ export default function AuthModal() {
       const createdUser = await api.user.register(values);
       setUser(createdUser);
       setIsLoggedIn(true);
-      console.log(user);
-    } catch (error) {}
+
+      if (createdUser.access_token) setAccessToken(createdUser.access_token);
+    } catch (error) {
+      const { response } = error as AxiosError<{ message: string | string[] }>;
+
+      if (response?.data.message === 'This email alredy used') {
+        formik.setFieldError('email', 'This email alredy used');
+      }
+    }
   }
 
   return (
@@ -71,6 +83,7 @@ export default function AuthModal() {
         type="password"
         label="Password"
       />
+      <p>{formik.errors.email}</p>
       <CustomButton type="submit" text={isLogin ? 'Login' : 'Create'} />
       <CustomButton
         type="button"

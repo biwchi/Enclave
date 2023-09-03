@@ -2,10 +2,12 @@ import axios from 'axios';
 import { ProductsRest } from './products';
 import { UserRest } from './user';
 import { useReadLocalStorage } from 'usehooks-ts';
+import { WishlistRest } from './wishlist';
 
 class Rest {
   public readonly products;
   public readonly user;
+  public readonly wishlist;
 
   private endpoint;
 
@@ -14,6 +16,7 @@ class Rest {
 
     this.user = new UserRest(this.endpoint);
     this.products = new ProductsRest(this.endpoint);
+    this.wishlist = new WishlistRest(this.endpoint);
 
     this.axiosReqInterceptor();
   }

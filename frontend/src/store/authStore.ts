@@ -3,7 +3,9 @@ import { create } from 'zustand';
 
 type AuthStoreState = {
   user: User;
+  isLoggedIn: boolean;
   setUser: (user: User) => void;
+  setIsLoggedIn: (value: boolean) => void;
 };
 
 export const useAuthStore = create<AuthStoreState>()((set) => ({
@@ -13,6 +15,8 @@ export const useAuthStore = create<AuthStoreState>()((set) => ({
     email: '',
     username: ''
   },
+  isLoggedIn: false,
+  setIsLoggedIn: (value) => set(() => ({ isLoggedIn: value })),
   setUser: (user) =>
     set(() => ({
       user

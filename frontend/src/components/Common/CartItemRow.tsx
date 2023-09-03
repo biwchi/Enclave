@@ -6,6 +6,7 @@ import CartIcon from '@/assets/icons/CartIcon';
 import { CartItemProps, ImageCheck } from './CartItem';
 import { Link } from 'react-router-dom';
 import { SubCategory } from '@/services/products/types';
+import { useRest } from '@/services';
 
 type CartItemRowProps = {
   rating: number;
@@ -25,6 +26,16 @@ export default function CartItemRow({
   id,
   rating
 }: CartItemRowProps) {
+  const api = useRest();
+
+  async function addToWishList() {
+    try {
+      api.wishlist.addToWishlist(id);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="grid grid-cols-[0.3fr,1fr,0.3fr] border border-solid border-gray-100 p-5">
       <div className="h-60 w-60">
@@ -33,7 +44,7 @@ export default function CartItemRow({
         </Link>
       </div>
       <div className="flex-auto px-5">
-        <h2 className="text-xs text-gray-700">{category}</h2>
+        <h2 className="text-xs text-gray-700">{category.title}</h2>
         <Link
           to={`product/${id}`}
           className="block cursor-pointer py-5 font-medium text-primary-700  underline-offset-1 hover:underline">
@@ -44,6 +55,7 @@ export default function CartItemRow({
       </div>
       <div className="self-center">
         <CustomButton
+          onClick={addToWishList}
           variant="outline"
           rightIcon={<FavoriteIcon />}
           colors={{ buttonColor: 'gray', textColor: 'text-gray-600' }}

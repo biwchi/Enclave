@@ -10,6 +10,7 @@ import {
   ValidationPipe,
   UseGuards,
   Req,
+  NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -27,14 +28,12 @@ export class UserController {
   ) {}
 
   @Post('register')
-  @UsePipes(new ValidationPipe())
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  @UsePipes(new ValidationPipe())
   login(@Req() req) {
     return this.authService.login(req.user);
   }
@@ -43,7 +42,10 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   async getProfile(@Req() req) {
     const user = await this.userService.findOne(req.user.email);
+
+    if (!user) throw new NotFoundException('User does not exist');
+
     delete user.password;
-    return user;
+    return;
   }
 }

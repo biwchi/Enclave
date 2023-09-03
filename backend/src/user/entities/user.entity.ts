@@ -1,4 +1,5 @@
 import { Cart } from 'src/cart/entities/cart.entity';
+import { Wishlist } from 'src/wishlist/entities/wishlist.entity';
 import {
   Column,
   CreateDateColumn,
@@ -13,6 +14,9 @@ export class User {
   id: string;
 
   @Column()
+  username: string;
+
+  @Column()
   email: string;
 
   @Column()
@@ -23,4 +27,7 @@ export class User {
 
   @OneToOne(() => Cart, (cart) => cart.user)
   cart: Cart;
+
+  @OneToOne(() => Wishlist, (wishlist) => wishlist.user)
+  wishlist: Wishlist;
 }

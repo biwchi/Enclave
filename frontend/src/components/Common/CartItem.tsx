@@ -1,11 +1,12 @@
 import CartIcon from '@/assets/icons/CartIcon';
 import NoImageIcon from '@/assets/icons/NoImageIcon';
 import FavoriteIcon from '@/assets/icons/favoriteIcon';
-import { Review } from '@/services/products/types';
+import { useRest } from '@/services';
+import { Category, Review } from '@/services/products/types';
 
 export type CartItemProps = {
   id: string;
-  category: string;
+  category: Category;
   title: string;
   imageUrl: string | null;
   price: number;
@@ -14,6 +15,7 @@ export type CartItemProps = {
 };
 
 export default function CartItem({
+  id,
   category,
   title,
   imageUrl,
@@ -21,12 +23,21 @@ export default function CartItem({
   inWishlist,
   inCart
 }: CartItemProps) {
+  const api = useRest();
+  async function addToWishList() {
+    try {
+      api.wishlist.addToWishlist(id);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="rounded-md border border-solid border-gray-100 p-5">
-      <h2 className="mb-5 text-xs text-gray-700">{category}</h2>
+      <h2 className="mb-5 text-xs text-gray-700">{category.title}</h2>
       <h1 className="text-sm font-medium text-primary-700">{title}</h1>
 
-      <div className="h-72 py-5">
+      <div className="my-5 h-52">
         <ImageCheck image={imageUrl} />
       </div>
 
@@ -34,7 +45,9 @@ export default function CartItem({
         <h2 className="text-lg font-bold">${price}</h2>
         <div>
           <button className="group/button relative rounded-full bg-primary-600 p-3 transition hover:bg-primary-700">
-            <button className="group invisible absolute bottom-0 left-0 rounded-full bg-white p-3 opacity-0 shadow transition-all group-hover/button:visible group-hover/button:bottom-full group-hover/button:opacity-100">
+            <button
+              onClick={addToWishList}
+              className="group invisible absolute bottom-0 left-0 rounded-full bg-white p-3 opacity-0 shadow transition-all group-hover/button:visible group-hover/button:bottom-[calc(100%+0.5rem)] group-hover/button:opacity-100">
               <FavoriteIcon
                 height={20}
                 width={20}

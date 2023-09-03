@@ -14,14 +14,16 @@ import { MouseEvent, useRef, useState } from 'react';
 import { useShopStore } from '@/store/shopStore';
 import { Category } from '@/services/products/types';
 import CustomButton from '../UI/CustomButton';
-import { useAuthListener } from '@/hooks';
 import { useLocalStorage } from 'usehooks-ts';
+import { useAuthStore } from '@/store/authStore';
+import SignOutIcon from '@/assets/icons/SignOutIcon';
+import { Link } from 'react-router-dom';
 
 export default function SearchBar() {
   const dropDown = useRef<HTMLDivElement | null>(null);
 
   const { categories } = useShopStore();
-  const { isLoggedIn, setIsLoggedIn } = useAuthListener();
+  const { isLoggedIn, setIsLoggedIn } = useAuthStore();
 
   const [selected, setSelected] = useState(-1);
   const [authModal, setAuthModal] = useState(false);
@@ -51,7 +53,9 @@ export default function SearchBar() {
     <div className="relative">
       <div className="m-auto flex max-w-[1400px] items-center justify-between py-5">
         <div>
-          <LogoIcon />
+          <Link to="/">
+            <LogoIcon />
+          </Link>
         </div>
         <Search />
         {isLoggedIn ? (
@@ -60,10 +64,12 @@ export default function SearchBar() {
               title="My profile"
               icon={<UserIcon className="text-gray-700" width={24} height={24} />}
             />
-            <IconButton
-              title="Wishlist"
-              icon={<FavoriteIcon className="text-gray-700" width={24} height={24} />}
-            />
+            <Link to="wishlist">
+              <IconButton
+                title="Wishlist"
+                icon={<FavoriteIcon className="text-gray-700" width={24} height={24} />}
+              />
+            </Link>
             <IconButton
               title="My cart"
               text="$0.00"
@@ -75,7 +81,7 @@ export default function SearchBar() {
                 setAccessToken('');
               }}
               title="Login out"
-              icon={<CartIcon className="text-gray-700" width={24} height={24} />}
+              icon={<SignOutIcon className="text-gray-700" width={24} height={24} />}
             />
           </div>
         ) : (

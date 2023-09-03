@@ -12,6 +12,7 @@ import { ContactModule } from './contact/contact.module';
 import { AuthModule } from './auth/auth.module';
 import { ReviewModule } from './review/review.module';
 import { UpdateProductRating } from './products/subcriber/UpdateRating';
+import { WishlistModule } from './wishlist/wishlist.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { UpdateProductRating } from './products/subcriber/UpdateRating';
     ContactModule,
     AuthModule,
     ReviewModule,
+    WishlistModule,
   ],
   controllers: [AppController],
   providers: [AppService],
