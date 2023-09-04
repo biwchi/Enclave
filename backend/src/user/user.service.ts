@@ -10,15 +10,12 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Cart } from 'src/cart/entities/cart.entity';
-import { Wishlist } from 'src/wishlist/entities/wishlist.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Cart) private readonly cartRepository: Repository<Cart>,
-    @InjectRepository(Wishlist)
-    private readonly wishlistRepository: Repository<Wishlist>,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -34,10 +31,6 @@ export class UserService {
       user: {
         id: user.id,
       },
-    });
-
-    await this.wishlistRepository.insert({
-      user: { id: user.id },
     });
 
     const token = this.jwtService.sign({ email: user.email, id: user.id });

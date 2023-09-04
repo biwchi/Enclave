@@ -5,16 +5,17 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Wishlist } from './wishlist.entity';
 import { Product } from 'src/products/entities/product.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Entity()
 export class WishlistItem {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Wishlist, (wishlist) => wishlist.products)
-  wishlist: Wishlist;
+  @OneToOne(() => User, (user) => user.id)
+  @JoinColumn()
+  user: User;
 
   @OneToOne(() => Product, (product) => product.id)
   @JoinColumn()

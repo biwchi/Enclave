@@ -8,11 +8,10 @@ import { AuthModule } from 'src/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Cart } from 'src/cart/entities/cart.entity';
-import { Wishlist } from 'src/wishlist/entities/wishlist.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Cart, Wishlist]),
+    TypeOrmModule.forFeature([User, Cart]),
     forwardRef(() => AuthModule),
     JwtModule.registerAsync({
       imports: [ConfigModule],

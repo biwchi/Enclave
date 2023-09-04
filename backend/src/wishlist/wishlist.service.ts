@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorDescription, Repository } from 'typeorm';
-import { Wishlist } from './entities/wishlist.entity';
 import { handleUUID } from 'src/utils';
 import { WishlistItem } from './entities/wishlist-item.entity';
 import { DefaultResponse } from 'src/common/dto/defaultResponse.dto';
@@ -15,8 +14,6 @@ import { DefaultQuery } from 'src/common/dto/defaultQuery.dto';
 @Injectable()
 export class WishlistService {
   constructor(
-    @InjectRepository(Wishlist)
-    private readonly wishlistRepository: Repository<Wishlist>,
     @InjectRepository(WishlistItem)
     private readonly wishlistItemRepository: Repository<WishlistItem>,
   ) {}
@@ -24,14 +21,10 @@ export class WishlistService {
   async addToWishlist(id: string, userId: string) {
     handleUUID(id);
 
-    const wishlist = await this.wishlistRepository.findOne({
-      where: { user: { id: userId } },
-    });
-
     try {
       await this.wishlistItemRepository.insert({
         product: { id: id },
-        wishlist: { id: wishlist.id },
+        user: { id: userId },
       });
     } catch (error) {
       const err = error as ErrorDescription;
@@ -46,7 +39,7 @@ export class WishlistService {
         relations: {
           product: { category: true },
         },
-        where: { wishlist: { user: { id: userId } } },
+        where: { user: { id: userId } },
       });
 
     const meta = new DefaultMetaResponse({

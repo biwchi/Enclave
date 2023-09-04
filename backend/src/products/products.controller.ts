@@ -22,6 +22,8 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { DefaultQuery } from 'src/common/dto/defaultQuery.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { ProductFilters } from './dto/product-filters.dto';
+import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('products')
 export class ProductsController {
@@ -47,11 +49,12 @@ export class ProductsController {
   findAll(
     @Query() defaultQuery: DefaultQuery,
     @Req() req,
-    @Query() productFIlters?: ProductFilters,
+    @Query() productFilters?: ProductFilters,
   ) {
+    console.log(req);
     return this.productsService.findAll(
       defaultQuery,
-      productFIlters,
+      productFilters,
       req.user?.id,
     );
   }

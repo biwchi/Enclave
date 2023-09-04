@@ -26,6 +26,7 @@ export class WishlistController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   getWishlist(@Query() defaultQuery: DefaultQuery, @Req() req) {
     return this.wishlistService.getWishlist(defaultQuery, req.user.id);
   }

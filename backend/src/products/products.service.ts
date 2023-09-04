@@ -108,11 +108,14 @@ export class ProductsService {
           : undefined,
     };
 
+    console.log(userId);
     if (userId) {
       console.log(
-        this.wishlistItemRepositry.find({
+        await this.wishlistItemRepositry.find({
+          select: { product: { id: true } },
+          relations: { product: true },
           where: {
-            wishlist: { user: { id: userId } },
+            user: { id: userId },
           },
         }),
       );
