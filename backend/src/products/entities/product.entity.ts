@@ -1,10 +1,6 @@
 import {
-  AfterInsert,
-  AfterLoad,
-  AfterUpdate,
   Column,
   CreateDateColumn,
-  DataSource,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -13,13 +9,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VirtualColumn,
-  createQueryBuilder,
-  getManager,
 } from 'typeorm';
 import { Category } from './category.entity';
 import { SubCategory } from './subCategory.entity';
 import { Review } from 'src/review/entities/review.entity';
-import { Transform } from 'class-transformer';
 
 @Entity()
 export class Product {

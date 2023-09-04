@@ -25,6 +25,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { SubCategory } from './entities/subCategory.entity';
 import { ProductFilters } from './dto/product-filters.dto';
 import { ProductsOrderig } from './constants';
+import { WishlistItem } from 'src/wishlist/entities/wishlist-item.entity';
 
 @Injectable()
 export class ProductsService {
@@ -35,6 +36,8 @@ export class ProductsService {
     private readonly categoryRepositry: Repository<Category>,
     @InjectRepository(SubCategory)
     private readonly subCategoryRepositry: Repository<SubCategory>,
+    @InjectRepository(WishlistItem)
+    private readonly wishlistItemRepositry: Repository<WishlistItem>,
   ) {}
 
   public async create(createProductDto: CreateProductDto) {
@@ -85,6 +88,7 @@ export class ProductsService {
   public async findAll(
     defaultQuery: DefaultQuery,
     productFilters?: ProductFilters,
+    userId?: string,
   ) {
     const ordering: FindOptionsOrder<Product> = {
       reviewCount:
@@ -103,6 +107,16 @@ export class ProductsService {
           ? 'DESC'
           : undefined,
     };
+
+    if (userId) {
+      console.log(
+        this.wishlistItemRepositry.find({
+          where: {
+            wishlist: { user: { id: userId } },
+          },
+        }),
+      );
+    }
 
     const [products, itemCount] = await this.productRepository.findAndCount({
       relations: {

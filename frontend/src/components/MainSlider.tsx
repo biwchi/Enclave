@@ -24,21 +24,22 @@ export default function MainSlider({ slides }: MainSliderProps) {
 
     const mouseUp = () => {
       pressed.current = false;
+      sliderPosition.current.lastX = sliderPosition.current.x;
+      console.log(sliderPosition.current);
     };
 
     const mouseMove = (e: globalThis.MouseEvent) => {
       if (!wrapperRef.current || !sliderRef.current) return;
       if (!pressed.current) return;
       e.preventDefault();
+      e.stopPropagation();
+      wrapperRef.current.style.transform = `translateX(${sliderPosition.current.x}px)`;
 
-      sliderPosition.current.lastX = e.offsetX - sliderPosition.current.x;
-      wrapperRef.current.style.transform = `translateX(${
-        e.offsetX - sliderPosition.current.lastX
-      }px)`;
+      console.log(e);
     };
 
     sliderRef.current?.addEventListener('mousedown', mouseDown);
-    sliderRef.current?.addEventListener('mousemove', mouseMove);
+    sliderRef.current?.addEventListener('mousemove', (e) => mouseMove(e));
     sliderRef.current?.addEventListener('mouseup', mouseUp);
 
     return () => {
@@ -52,7 +53,7 @@ export default function MainSlider({ slides }: MainSliderProps) {
     <div ref={sliderRef} className="relative">
       <div className={'flex'} ref={wrapperRef}>
         {slides.map((slide, idx) => (
-          <div key={idx}>{slide}</div>
+          <>{slide}</>
         ))}
       </div>
       <div className="absolute bottom-7 left-1/2 -translate-x-1/2">

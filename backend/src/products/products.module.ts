@@ -5,9 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Category } from './entities/category.entity';
 import { SubCategory } from './entities/subCategory.entity';
+import { WishlistItem } from 'src/wishlist/entities/wishlist-item.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Product, Category, SubCategory])],
+  imports: [
+    TypeOrmModule.forFeature([Product, Category, SubCategory, WishlistItem]),
+  ],
   controllers: [ProductsController],
   providers: [ProductsService],
 })

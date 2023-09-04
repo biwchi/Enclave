@@ -13,6 +13,7 @@ import {
   HttpStatus,
   HttpCode,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -45,9 +46,14 @@ export class ProductsController {
   @Get()
   findAll(
     @Query() defaultQuery: DefaultQuery,
+    @Req() req,
     @Query() productFIlters?: ProductFilters,
   ) {
-    return this.productsService.findAll(defaultQuery, productFIlters);
+    return this.productsService.findAll(
+      defaultQuery,
+      productFIlters,
+      req.user?.id,
+    );
   }
 
   @Get('category')
