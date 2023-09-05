@@ -29,7 +29,11 @@ const sorting: ItemTitleValue<ProductsOrderig>[] = [
   },
   { title: 'Popular', value: ProductsOrderig.POPULAR }
 ];
-const productPerPage = [20, 40, 60];
+const productPerPage = [
+  { title: '20 products/page', value: 20 },
+  { title: '40 products/page', value: 40 },
+  { title: '60 products/page', value: 60 }
+];
 
 export default function ShopPageHeader({
   productsCount = 93248,
@@ -72,8 +76,8 @@ export default function ShopPageHeader({
             rouneded
           />
           <CustomSelect
-            selected={filters.page_size}
-            onSelect={(value) => setFilters({ page_size: value ? Number(value) : 20 })}
+            selected={productPerPage.find((value) => value.value === filters.page_size)}
+            onSelect={(value) => setFilters({ page_size: value ? Number(value.value) : 20 })}
             options={productPerPage}
             rouneded
           />

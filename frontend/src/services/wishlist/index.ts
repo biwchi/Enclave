@@ -15,4 +15,8 @@ export class WishlistRest extends BaseRest {
   addToWishlist(id: string) {
     return this.post(`wishlist/${id}`);
   }
+
+  removeFromWishlist(id: string) {
+    return this.post(`wishlist/${id}/remove`);
+  }
 }

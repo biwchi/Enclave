@@ -23,16 +23,16 @@ export default function ShopPageFilter<T>({
   onSelect
 }: ShopPageFilterProps<T>) {
   const [opened, setOpened] = useState(false);
+
   const optionsRef = useRef<HTMLUListElement | null>(null);
   const optionRef = useRef<HTMLLIElement | null>(null);
   const defaultShowCount = options.length <= showItemLength ? options.length : showItemLength;
 
   function checkSelected(option: T) {
-    if (typeof selected === 'object') {
-      if (Array.isArray(selected)) {
-        return selected.find((item) => JSON.stringify(item) === JSON.stringify(option));
-      }
+    if (Array.isArray(selected)) {
+      return selected.find((item) => JSON.stringify(item) === JSON.stringify(option));
     }
+
     return JSON.stringify(selected) === JSON.stringify(option);
   }
 

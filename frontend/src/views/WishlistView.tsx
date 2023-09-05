@@ -15,6 +15,10 @@ export default function WishlistView() {
     } catch (error) {}
   }
 
+  function handleRemove(id: string) {
+    setUserWishlist(usersWishlist.filter((product) => product.id !== id));
+  }
+
   useEffect(() => {
     fetchUserWishList();
   }, []);
@@ -23,16 +27,20 @@ export default function WishlistView() {
     <div>
       <h1 className="title">Wishlist</h1>
 
-      <div className="grid mt-5 grid-cols-5 gap-3">
+      <div className="mt-5 grid grid-cols-5 gap-3">
         {usersWishlist.map((product) => (
           <CartItem
+            key={product.id}
             id={product.id}
             category={product.category}
             title={product.title}
             imageUrl={product.imageUrl}
             price={product.price}
-            inWishlist={false}
+            inWishlist={product.inWishlist ?? false}
+            onRemoveWishlist={(id) => handleRemove(id)}
             inCart={false}
+            rating={0}
+            reviewsCount={0}
           />
         ))}
       </div>

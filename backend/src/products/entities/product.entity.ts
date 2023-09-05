@@ -28,6 +28,9 @@ export class Product {
   @Column()
   price: number;
 
+  @Column({ default: false, nullable: true })
+  inWishlist: boolean;
+
   @Column({
     type: 'float4',
     nullable: true,

@@ -32,6 +32,17 @@ export class WishlistService {
     }
   }
 
+  async removeWishlist(id: string, userId: string) {
+    handleUUID(id);
+
+    try {
+      await this.wishlistItemRepository.delete({
+        product: { id },
+        user: { id: userId },
+      });
+    } catch (error) {}
+  }
+
   async getWishlist(defaultQuery: DefaultQuery, userId: string) {
     handleUUID(userId);
     const [products, itemCount] =
@@ -41,6 +52,11 @@ export class WishlistService {
         },
         where: { user: { id: userId } },
       });
+
+    products.map((product) => {
+      product.product.inWishlist = true;
+      return product;
+    });
 
     const meta = new DefaultMetaResponse({
       defaultQuery: defaultQuery,

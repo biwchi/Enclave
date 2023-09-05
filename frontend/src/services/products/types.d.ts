@@ -10,6 +10,7 @@ export type Product = {
   updated_at: Date;
   create_at: Date;
   subCategory: SubCategory;
+  inWishlist: boolean | null;
 };
 
 export type Review = {

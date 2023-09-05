@@ -6,7 +6,7 @@ import { create } from 'zustand';
 export type ShopFilters = {
   priceMin?: number;
   priceMax?: number;
-  brand?: ItemTitleValue | string;
+  brand?: string;
   rating?: number;
   category?: number;
   subCategory?: number;

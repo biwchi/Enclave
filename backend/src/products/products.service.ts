@@ -65,7 +65,6 @@ export class ProductsService {
         category: { id: createCategoryDto.id },
       });
     } else {
-      console.log(createCategoryDto);
       await this.categoryRepositry.insert({ title: createCategoryDto.title });
     }
   }
@@ -91,6 +90,7 @@ export class ProductsService {
     userId?: string,
   ) {
     const ordering: FindOptionsOrder<Product> = {
+      created_at: 'ASC',
       reviewCount:
         productFilters.ordering === ProductsOrderig.POPUlAR
           ? 'DESC'
@@ -107,19 +107,6 @@ export class ProductsService {
           ? 'DESC'
           : undefined,
     };
-
-    console.log(userId);
-    if (userId) {
-      console.log(
-        await this.wishlistItemRepositry.find({
-          select: { product: { id: true } },
-          relations: { product: true },
-          where: {
-            user: { id: userId },
-          },
-        }),
-      );
-    }
 
     const [products, itemCount] = await this.productRepository.findAndCount({
       relations: {
@@ -146,6 +133,25 @@ export class ProductsService {
       skip: defaultQuery.skip,
       take: defaultQuery.page_size,
     });
+
+    if (userId) {
+      const wishList = await this.wishlistItemRepositry.find({
+        select: { product: { id: true } },
+        relations: { product: true },
+        where: {
+          user: { id: userId },
+        },
+      });
+
+      wishList.forEach((item) => {
+        products.map((product) => {
+          if (product.id === item.product.id) {
+            product.inWishlist = true;
+            return product;
+          }
+        });
+      });
+    }
 
     const meta = new DefaultMetaResponse({
       itemCount,

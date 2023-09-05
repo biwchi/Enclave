@@ -1,6 +1,5 @@
 import ChevronIcon from '@/assets/icons/ChevronIcon';
 import { ItemTitleValue } from '@/services/types';
-import { useField } from 'formik';
 import { useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
 
@@ -25,6 +24,7 @@ export default function CustomSelect<T>({
   rouneded = false
 }: CustomSelectProps<T>) {
   const [opened, setOpened] = useState(false);
+  
   const selectRef = useRef<HTMLDivElement | null>(null);
 
   function select(option: T) {
@@ -84,8 +84,10 @@ export default function CustomSelect<T>({
 
 export function defineTitle<T = Option>(option: T | undefined) {
   if (!option) return '';
+
   if (typeof option === 'object') {
     if ('title' in option) return option.title as string;
-  } else return option.toString();
-  return '';
+  }
+
+  return option.toString();
 }

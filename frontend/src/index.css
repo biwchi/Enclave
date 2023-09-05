@@ -106,3 +106,7 @@ body {
 .title {
   @apply text-3xl font-medium;
 }
+
+.full-center {
+  @apply flex h-full w-full items-center justify-center;
+}

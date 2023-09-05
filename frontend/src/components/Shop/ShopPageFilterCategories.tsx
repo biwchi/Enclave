@@ -1,10 +1,9 @@
-import MdiChevronDown from '@/assets/icons/ChevronLightIcon';
 import { Category, SubCategory } from '@/services/products/types';
 import { useShopStore } from '@/store/shopStore';
-import { useState } from 'react';
 
 export default function ShopPageFilterCategories() {
   const { categories, filters, setFilters } = useShopStore();
+  
   return (
     <div className="rounded-md bg-gray-100 p-5">
       <h1
