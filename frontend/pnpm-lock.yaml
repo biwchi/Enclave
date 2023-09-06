@@ -8,6 +8,9 @@ dependencies:
   '@nestjs/mapped-types':
     specifier: '*'
     version: 0.0.1(class-transformer@0.2.3)(class-validator@0.11.1)(reflect-metadata@0.1.13)
+  class-variance-authority:
+    specifier: ^0.7.0
+    version: 0.7.0
   formik:
     specifier: ^2.4.3
     version: 2.4.3(react@18.2.0)
@@ -1019,6 +1022,17 @@ packages:
       '@types/validator': 10.11.3
       google-libphonenumber: 3.2.33
       validator: 12.0.0
+    dev: false
+
+  /class-variance-authority@0.7.0:
+    resolution: {integrity: sha512-jFI8IQw4hczaL4ALINxqLEXQbWcNjoSkloa4IaufXCJr6QawJyw7tuRysRsrE8w2p/4gGaxKIt/hX3qz/IbD1A==}
+    dependencies:
+      clsx: 2.0.0
+    dev: false
+
+  /clsx@2.0.0:
+    resolution: {integrity: sha512-rQ1+kcj+ttHG0MKVGBUXwayCCF1oh39BF5COIpRzuCEv8Mwjv0XucrI2ExNTOn9IlLifGClWQcU9BrZORvtw6Q==}
+    engines: {node: '>=6'}
     dev: false
 
   /color-convert@1.9.3:
