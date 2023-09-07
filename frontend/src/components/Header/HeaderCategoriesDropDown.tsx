@@ -1,27 +1,31 @@
 import { Category } from '@/services/products/types';
+import { useShopStore } from '@/store/shopStore';
 import { Link } from 'react-router-dom';
 
 type CategoriesDropDownProps = {
-  categories: Category[];
+  category: Category;
 };
 
-export default function CategoriesDropDown({ categories }: CategoriesDropDownProps) {
+export default function CategoriesDropDown({ category }: CategoriesDropDownProps) {
+  const { setFilters } = useShopStore();
+
+
   return (
-    <div className="grid grid-flow-col grid-rows-2 gap-14 rounded-md bg-white p-5 shadow-md">
-      {categories.map((category, idx) => (
-        <div key={idx} className="flex w-44 flex-col gap-4">
-          <h1 className="px-3 text-lg font-medium">{category.title}</h1>
-          <div className="flex flex-col">
-            {category.subCategories.map((subCategory, idx) => {
-              return (
-                <Link key={idx} className=" px-3 py-3 text-gray-700 hover:bg-gray-100 " to={'/'}>
-                  {subCategory.title}
-                </Link>
-              );
-            })}
+    <div className="rounded-lg bg-white p-5 shadow-md">
+      <h1 className="mb-3 px-3 text-lg font-medium">{category.title}</h1>
+      {category.subCategories.map((subCategory, idx) => {
+        return (
+          <div key={idx} className="flex flex-col gap-4">
+            <Link
+              onClick={() => setFilters({ category: category.id, subCategory: subCategory.id })}
+              key={idx}
+              className=" rounded-md px-3 py-3 text-gray-700 hover:bg-gray-100 "
+              to={'/shop'}>
+              {subCategory.title}
+            </Link>
           </div>
-        </div>
-      ))}
+        );
+      })}
       <div></div>
     </div>
   );

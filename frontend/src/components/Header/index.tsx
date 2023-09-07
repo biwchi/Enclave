@@ -1,10 +1,14 @@
 import LogoIcon from '@/assets/icons/LogoIcon';
-import CustomSelect from '../UI/CustomSelect';
+import SignOutIcon from '@/assets/icons/SignOutIcon';
 import SearchIcon from '@/assets/icons/SearchIcon';
-import IconButton from '../UI/IconButton';
 import UserIcon from '@/assets/icons/UserIcon';
 import FavoriteIcon from '@/assets/icons/favoriteIcon';
 import CartIcon from '@/assets/icons/CartIcon';
+
+import BaseSelect from '../UI/BaseSelect';
+import BaseButton from '../UI/BaseButton';
+import BaseIconButton from '../UI/BaseIconButton';
+
 import CategoriesDropDown from './HeaderCategoriesDropDown';
 import CategoriesNavBar from './HeaderCategorigesNavBar';
 import Modal from '../Modal';
@@ -13,10 +17,8 @@ import AuthModal from '../Auth/AuthModal';
 import { MouseEvent, useRef, useState } from 'react';
 import { useShopStore } from '@/store/shopStore';
 import { Category } from '@/services/products/types';
-import CustomButton from '../UI/CustomButton';
 import { useLocalStorage } from 'usehooks-ts';
 import { useAuthStore } from '@/store/authStore';
-import SignOutIcon from '@/assets/icons/SignOutIcon';
 import { Link } from 'react-router-dom';
 
 export default function SearchBar() {
@@ -25,18 +27,25 @@ export default function SearchBar() {
   const { categories } = useShopStore();
   const { isLoggedIn, setIsLoggedIn } = useAuthStore();
 
-  const [selected, setSelected] = useState(-1);
   const [authModal, setAuthModal] = useState(false);
   const [_accessToken, setAccessToken] = useLocalStorage('access_token', '');
+  const [selected, setSelected] = useState({
+    id: 0,
+    show: false
+  });
 
   function openDropDown(event: MouseEvent<HTMLDivElement>, idx: number) {
+    const hasSubCategories = !categories[idx].subCategories[0].id;
+
     if (!dropDown.current) return;
+    if (hasSubCategories) return;
+
     const target = event.currentTarget;
     const categoryRect = target.getBoundingClientRect();
     const dropDownRect = dropDown.current.getBoundingClientRect();
-
     const position = categoryRect.x + categoryRect.width / 2 - dropDownRect.width / 2;
-    setSelected(idx);
+
+    setSelected({ id: idx, show: true });
 
     if (position < 0) {
       dropDown.current.style.left = `${0}px`;
@@ -60,22 +69,22 @@ export default function SearchBar() {
         <Search />
         {isLoggedIn ? (
           <div className="flex gap-8">
-            <IconButton
+            <BaseIconButton
               title="My profile"
               icon={<UserIcon className="text-gray-700" width={24} height={24} />}
             />
             <Link to="wishlist">
-              <IconButton
+              <BaseIconButton
                 title="Wishlist"
                 icon={<FavoriteIcon className="text-gray-700" width={24} height={24} />}
               />
             </Link>
-            <IconButton
+            <BaseIconButton
               title="My cart"
               text="$0.00"
               icon={<CartIcon className="text-gray-700" width={24} height={24} />}
             />
-            <IconButton
+            <BaseIconButton
               onClick={() => {
                 setIsLoggedIn(false);
                 setAccessToken('');
@@ -86,10 +95,11 @@ export default function SearchBar() {
           </div>
         ) : (
           <div>
-            <CustomButton onClick={() => setAuthModal(true)} text="Sign up" />
+            <BaseButton onClick={() => setAuthModal(true)} text="Sign up" />
           </div>
         )}
       </div>
+
       <Modal
         modalTitle="Create account"
         opened={authModal}
@@ -97,19 +107,20 @@ export default function SearchBar() {
         modalContent={<AuthModal />}
       />
       <CategoriesNavBar
-        selected={selected}
-        onLeave={() => setSelected(-1)}
+        hide={selected.show}
+        selected={selected.id}
+        onLeave={() => setSelected({ ...selected, show: false })}
         onHover={(e, idx) => openDropDown(e, idx)}
       />
       <div
         ref={dropDown}
         onMouseEnter={() => setSelected(selected)}
-        onMouseLeave={() => setSelected(-1)}
+        onMouseLeave={() => setSelected({ ...selected, show: false })}
         className={
           'absolute z-[1000] transition-all ' +
-          (selected !== -1 ? 'visible opacity-100' : 'invisible opacity-0')
+          (selected.show ? 'visible opacity-100' : 'invisible opacity-0')
         }>
-        <CategoriesDropDown categories={categories} />
+        {categories[selected.id] && <CategoriesDropDown category={categories[selected.id]} />}
       </div>
     </div>
   );
@@ -127,7 +138,7 @@ function Search() {
       />
       <div className="flex items-center">
         <div className="mr-2 h-[70%] w-0.5 bg-gray-200"></div>
-        <CustomSelect
+        <BaseSelect
           selected={searchCategory}
           placeholder="All categories"
           options={categories}

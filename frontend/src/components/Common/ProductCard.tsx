@@ -4,11 +4,11 @@ import FavoriteIcon from '@/assets/icons/favoriteIcon';
 import { useRest } from '@/services';
 import { Category, SubCategory } from '@/services/products/types';
 import { Link } from 'react-router-dom';
-import CustomButton from '../UI/CustomButton';
+import BaseButton from '../UI/BaseButton';
 import RatingStart from '../UI/RatingStars';
 import { useState } from 'react';
 
-export type CartItemProps = {
+export type ProductCardProps = {
   id: string;
   category: Category;
   title: string;
@@ -25,7 +25,7 @@ export type CartItemProps = {
   onRemoveWishlist?: (productId: string) => void;
 };
 
-export default function CartItem({
+export default function ProductCard({
   id,
   category,
   title,
@@ -38,14 +38,14 @@ export default function CartItem({
   row,
   onAddWishlist,
   onRemoveWishlist
-}: CartItemProps) {
+}: ProductCardProps) {
   const api = useRest();
 
   const [wishlist, setWishlist] = useState(inWishlist);
 
   async function addToWishList() {
     try {
-      api.wishlist.addToWishlist(id);
+      await api.wishlist.addToWishlist(id);
       setWishlist(true);
       onAddWishlist && onAddWishlist(id);
     } catch (error) {
@@ -55,7 +55,7 @@ export default function CartItem({
 
   async function removeFormWishlist() {
     try {
-      api.wishlist.removeFromWishlist(id);
+      await api.wishlist.removeFromWishlist(id);
       setWishlist(false);
       onRemoveWishlist && onRemoveWishlist(id);
     } catch (error) {
@@ -83,17 +83,13 @@ export default function CartItem({
         </div>
         <div className="flex flex-col gap-2 self-center">
           <h1 className="py-5 text-2xl font-medium">${price}</h1>
-          <CustomButton
+          <BaseButton
             onClick={wishlist ? removeFormWishlist : addToWishList}
-            background={
-              wishlist
-                ? 'bg-red-600 hover:bg-gray-600 text-white ring-red-300'
-                : 'bg-gray-300 hover:bg-red-600 text-gray-500 ring-gray-300 hover:text-white'
-            }
             rightIcon={<FavoriteIcon />}
+            variant={wishlist ? 'inWishlist' : 'toWishlist'}
             text="Wishlist"
           />
-          <CustomButton rightIcon={<CartIcon />} text="Add to cart" />
+          <BaseButton rightIcon={<CartIcon />} text="Add to cart" />
         </div>
       </div>
     );

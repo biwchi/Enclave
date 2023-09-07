@@ -1,6 +1,6 @@
 import GridIcon from '@/assets/icons/GridIcon';
-import CustomSelect from '../UI/CustomSelect';
-import IconButton from '../UI/IconButton';
+import CustomSelect from '../UI/BaseSelect';
+import IconButton from '../UI/BaseIconButton';
 import RowsIcon from '@/assets/icons/RowsIcon';
 import { useShopStore } from '@/store/shopStore';
 import { useState } from 'react';

@@ -1,9 +1,10 @@
 import MdiChevronDown from '@/assets/icons/ChevronLightIcon';
-import { Option, defineTitle } from '../UI/CustomSelect';
 import CheckIcon from '@/assets/icons/CheckIcon';
-import { useEffect, useRef, useState } from 'react';
 import FillStarIcon from '@/assets/icons/stars/FillStarIcon';
 import EmptyStarIcon from '@/assets/icons/stars/EmptyStarIcon';
+
+import { defineTitle } from '../UI/BaseSelect';
+import { useEffect, useRef, useState } from 'react';
 
 type ShopPageFilterProps<T> = {
   title: string;
@@ -54,9 +55,10 @@ export default function ShopPageFilter<T>({
       <h1 className="mb-5 font-medium">{title}</h1>
 
       <ul ref={optionsRef} className="overflow-hidden pl-2.5 transition-all">
-        {options.map((option) => {
+        {options.map((option, idx) => {
           return (
             <li
+              key={idx}
               ref={optionRef}
               onClick={() => (checkSelected(option) ? onSelect(undefined) : onSelect(option))}
               className="-ml-2.5 flex cursor-pointer items-center gap-3 rounded-md p-2.5 text-sm text-gray-700 hover:bg-gray-100">
@@ -68,11 +70,11 @@ export default function ShopPageFilter<T>({
                   <CheckIcon className="absolute text-gray-700" width={18} height={18} />
                 )}
               </div>
-              <p className="flex items-center">
-                {ratingStart && typeof option === 'number'
-                  ? getRatingStar(option)
-                  : defineTitle(option)}
-              </p>
+              {ratingStart && typeof option === 'number' ? (
+                getRatingStar(option)
+              ) : (
+                <p className="flex items-center">{defineTitle(option)}</p>
+              )}
             </li>
           );
         })}
@@ -98,9 +100,9 @@ function getRatingStar(option: number) {
     <div className="flex items-center justify-center gap-1">
       {Array.from({ length: starCount }).map((_item, idx) =>
         idx + 1 <= option ? (
-          <FillStarIcon className="text-warning-500" width={20} height={20} />
+          <FillStarIcon key={idx} className="text-warning-500" width={20} height={20} />
         ) : (
-          <EmptyStarIcon className="text-gray-400" width={20} height={20} />
+          <EmptyStarIcon key={idx} className="text-gray-400" width={20} height={20} />
         )
       )}
     </div>

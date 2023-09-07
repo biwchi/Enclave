@@ -1,6 +1,6 @@
-import { MouseEvent, useState } from 'react';
+import { useState } from 'react';
 import ChevronLightIcon from '@/assets/icons/ChevronLightIcon';
-import { defineTitle } from './CustomSelect';
+import { defineTitle } from './BaseSelect';
 
 type AccordionProps<T> = {
   title: string;
@@ -9,7 +9,7 @@ type AccordionProps<T> = {
   onOpen?: () => void;
 };
 
-export default function Accordion<T>({ title, items, isOpened, onOpen }: AccordionProps<T>) {
+export default function BaseAccordion<T>({ title, items, isOpened, onOpen }: AccordionProps<T>) {
   const [opened, setOpened] = useState(false);
 
   function open() {

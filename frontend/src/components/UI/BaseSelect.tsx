@@ -15,7 +15,7 @@ type CustomSelectProps<T> = {
   onSelect?: (option: T) => void;
 };
 
-export default function CustomSelect<T>({
+export default function BaseSelect<T>({
   placeholder,
   selected,
   options,

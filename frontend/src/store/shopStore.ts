@@ -1,6 +1,6 @@
 import { ProductsOrderig } from '@/constants/enums';
 import { Category, Product } from '@/services/products/types';
-import { ApiParams, ItemTitleValue, Ordering, ResponseMeta } from '@/services/types';
+import { ApiParams, ResponseMeta } from '@/services/types';
 import { create } from 'zustand';
 
 export type ShopFilters = {
@@ -35,6 +35,7 @@ export const useShopStore = create<ShopStore>()((set) => ({
     page_size: 0
   },
   filters: {
+    page: 1,
     page_size: 20,
     ordering: ProductsOrderig.RATING
   },

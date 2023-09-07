@@ -1,6 +1,7 @@
+import BaseButton from '../UI/BaseButton';
+import BaseInput from '../UI/BaseInput';
+
 import { useState } from 'react';
-import CustomButton from '../UI/CustomButton';
-import CustomInput from '../UI/CustomInput';
 import { useRest } from '@/services';
 import { useFormik } from 'formik';
 import { Login, Register } from '@/services/user/types';
@@ -61,7 +62,7 @@ export default function AuthModal() {
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
       {!isLogin && (
-        <CustomInput
+        <BaseInput
           value={formik.values.username}
           onChange={(e) => formik.setFieldValue('username', e.currentTarget.value)}
           name="username"
@@ -69,14 +70,14 @@ export default function AuthModal() {
           type="text"
         />
       )}
-      <CustomInput
+      <BaseInput
         value={formik.values.email}
         onChange={(e) => formik.setFieldValue('email', e.currentTarget.value)}
         name="email"
         label="Email"
         type="email"
       />
-      <CustomInput
+      <BaseInput
         value={formik.values.password}
         onChange={(e) => formik.setFieldValue('password', e.currentTarget.value)}
         name="password"
@@ -84,8 +85,8 @@ export default function AuthModal() {
         label="Password"
       />
       <p>{formik.errors.email}</p>
-      <CustomButton type="submit" text={isLogin ? 'Login' : 'Create'} />
-      <CustomButton
+      <BaseButton type="submit" text={isLogin ? 'Login' : 'Create'} />
+      <BaseButton
         type="button"
         onClick={() => setIsLogin((value) => (value = !value))}
         text={isLogin ? 'Don"t have an account? Sign up now!' : 'Alredy signed up? Login here!'}

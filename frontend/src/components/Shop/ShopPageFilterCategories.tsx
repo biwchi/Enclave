@@ -3,7 +3,7 @@ import { useShopStore } from '@/store/shopStore';
 
 export default function ShopPageFilterCategories() {
   const { categories, filters, setFilters } = useShopStore();
-  
+
   return (
     <div className="rounded-md bg-gray-100 p-5">
       <h1
@@ -22,9 +22,10 @@ export default function ShopPageFilterCategories() {
         />
       ) : (
         <ul>
-          {categories.map((category) => {
+          {categories.map((category, idx) => {
             return (
               <li
+                key={idx}
                 onClick={() => setFilters({ category: category.id })}
                 className="cursor-pointer rounded-md px-2.5 py-2.5 text-sm text-gray-700 last:pt-2.5  hover:bg-gray-200">
                 {category.title} <span>({category.totalProducts})</span>

@@ -1,4 +1,4 @@
-import CartItem from '@/components/Common/CartItem';
+import ProductCard from '@/components/Common/ProductCard';
 import { useRest } from '@/services';
 import { Product } from '@/services/products/types';
 import { useEffect, useState } from 'react';
@@ -29,7 +29,7 @@ export default function WishlistView() {
 
       <div className="mt-5 grid grid-cols-5 gap-3">
         {usersWishlist.map((product) => (
-          <CartItem
+          <ProductCard
             key={product.id}
             id={product.id}
             category={product.category}

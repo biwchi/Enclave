@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@nestjs/mapped-types": "*",
     "class-variance-authority": "^0.7.0",
     "formik": "^2.4.3",
     "react": "^18.2.0",

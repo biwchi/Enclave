@@ -1,5 +1,3 @@
-import { ClassAttributes } from 'react';
-
 type IconButtonProps = {
   icon: JSX.Element;
   background?: string;
@@ -10,7 +8,7 @@ type IconButtonProps = {
   onClick?: () => void;
 };
 
-export default function IconButton({
+export default function BaseIconButton({
   icon,
   onClick,
   title,

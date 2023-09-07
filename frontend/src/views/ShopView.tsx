@@ -1,4 +1,4 @@
-import CartItem from '@/components/Common/CartItem';
+import ProductCard from '@/components/Common/ProductCard';
 import Loader from '@/components/Common/Loader';
 import ShopPageFilters from '@/components/Shop/ShopPageFilters';
 import ShopPageHeader from '@/components/Shop/ShopPageHeader';
@@ -7,12 +7,13 @@ import { useRest } from '@/services';
 import { useShopStore } from '@/store/shopStore';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'usehooks-ts';
+import ShopPageFooter from '@/components/Shop/ShopPageFooter';
 
 export default function ShopView() {
   const [viewMode, setViewMode] = useState<'grid' | 'rows'>('rows');
   const [loading, setLoading] = useState(true);
 
-  const { meta, products, setProducts, filters } = useShopStore();
+  const { meta, products, filters, setProducts, setFilters } = useShopStore();
 
   const api = useRest();
   const filtersDebounce = useDebounce(filters, 400);
@@ -35,14 +36,18 @@ export default function ShopView() {
 
   useEffect(() => {
     getProducts();
-    console.log(filtersDebounce)
+    console.log(filtersDebounce);
   }, [filtersDebounce]);
+
+  useEffect(() => {
+    return () => {
+      setFilters({ ...filters, category: undefined, subCategory: undefined });
+    };
+  }, []);
 
   return (
     <div className="grid grid-cols-[272px,1fr] gap-5">
-      <div>
-        <ShopPageFilters />
-      </div>
+      <ShopPageFilters />
       <div>
         <ShopPageHeader
           productsCount={meta.count}
@@ -51,7 +56,7 @@ export default function ShopView() {
         />
         <div
           className={
-            'placeholder relative mt-5 grid gap-3 ' + (viewMode === 'grid' && 'grid-cols-4')
+            'placeholder relative my-5 grid gap-3 ' + (viewMode === 'grid' && 'grid-cols-4')
           }>
           {loading && (
             <div className="full-center absolute justify-center rounded-3xl bg-black/10">
@@ -61,7 +66,7 @@ export default function ShopView() {
           {products.map((product, idx) => {
             if (viewMode === 'grid') {
               return (
-                <CartItem
+                <ProductCard
                   key={idx}
                   reviewsCount={product.reviewCount}
                   id={product.id}
@@ -78,7 +83,7 @@ export default function ShopView() {
               );
             } else {
               return (
-                <CartItem
+                <ProductCard
                   row
                   key={idx}
                   reviewsCount={product.reviewCount}
@@ -97,6 +102,7 @@ export default function ShopView() {
             }
           })}
         </div>
+        <ShopPageFooter />
       </div>
     </div>
   );
