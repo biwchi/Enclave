@@ -12,7 +12,7 @@ import ShopPageFooter from '@/components/Shop/ShopPageFooter';
 export default function ShopView() {
   const [viewMode, setViewMode] = useState<'grid' | 'rows'>('rows');
   const [loading, setLoading] = useState(true);
-
+  console.log('render')
   const { meta, products, filters, setProducts, setFilters } = useShopStore();
 
   const api = useRest();
@@ -50,7 +50,6 @@ export default function ShopView() {
       <ShopPageFilters />
       <div>
         <ShopPageHeader
-          productsCount={meta.count}
           viewMode={viewMode}
           changeMode={(mode) => setViewMode(mode)}
         />

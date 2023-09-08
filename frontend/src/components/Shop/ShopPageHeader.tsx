@@ -9,7 +9,6 @@ import { ProductsOrderig } from '@/constants/enums';
 
 type ShopPageHeaderProps = {
   title?: string;
-  productsCount?: number;
   viewMode: 'grid' | 'rows';
   changeMode: (mode: 'grid' | 'rows') => void;
 };
@@ -36,12 +35,11 @@ const productPerPage = [
 ];
 
 export default function ShopPageHeader({
-  productsCount = 93248,
   title = 'Shop',
   viewMode,
   changeMode
 }: ShopPageHeaderProps) {
-  const { filters, setFilters } = useShopStore();
+  const { filters, setFilters, meta } = useShopStore();
 
   return (
     <div className="rounded-md border border-solid border-gray-100 p-5">
@@ -51,7 +49,7 @@ export default function ShopPageHeader({
           <span className="text-gray-700">Showing</span>
           <b className="px-1">1-{filters.page_size}</b>
           <span className="text-gray-700">of</span>
-          <b className="px-1">{productsCount}</b>
+          <b className="px-1">{meta.count}</b>
         </div>
       </div>
 
