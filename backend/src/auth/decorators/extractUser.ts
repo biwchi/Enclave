@@ -24,8 +24,12 @@ export const ExtractUser = createParamDecorator(
     const token = authHeader.split(' ')[1];
 
     if (bearer === 'Bearer' && token) {
-      req.user = jwtService.verify(token, { secret: process.env.JWT_SECRET });
-      return req.user;
+      const user = jwtService.verify(token, { secret: process.env.JWT_SECRET });
+
+      if (!user) return;
+
+      req.user = user;
+      return user;
     }
   },
 );
