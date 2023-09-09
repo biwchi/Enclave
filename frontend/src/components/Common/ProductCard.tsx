@@ -4,8 +4,8 @@ import FavoriteIcon from '@/assets/icons/favoriteIcon';
 import { useRest } from '@/services';
 import { Category, SubCategory } from '@/services/products/types';
 import { Link } from 'react-router-dom';
-import BaseButton from '../UI/BaseButton';
-import RatingStart from '../UI/RatingStars';
+import BaseButton from '../BaseComponents/BaseButton';
+import RatingStart from '../BaseComponents/RatingStars';
 import { useState } from 'react';
 
 export type ProductCardProps = {
@@ -67,14 +67,14 @@ export default function ProductCard({
     return (
       <div className="grid grid-cols-[0.3fr,1fr,0.3fr] border border-solid border-gray-100 p-5">
         <div className="h-60 w-60">
-          <Link to={`product/${id}`}>
+          <Link to={`${id}`}>
             <ImageCheck image={imageUrl} />
           </Link>
         </div>
         <div className="flex-auto px-5">
           <h2 className="text-xs text-gray-700">{category.title}</h2>
           <Link
-            to={`product/${id}`}
+            to={`${id}`}
             className="block cursor-pointer py-5 font-medium text-primary-700  underline-offset-1 hover:underline">
             {title}
           </Link>

@@ -1,5 +1,5 @@
 import { useShopStore } from '@/store/shopStore';
-import BasePagination from '../UI/BasePagination';
+import BasePagination from '../BaseComponents/BasePagination';
 
 export default function ShopPageFooter() {
   const { filters, meta, setFilters } = useShopStore();

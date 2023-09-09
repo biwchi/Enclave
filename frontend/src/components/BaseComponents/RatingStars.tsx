@@ -28,7 +28,7 @@ export default function RatingStart({ rating, reviewsCount }: RatingStartProsp) 
   return (
     <div className="flex items-center gap-3">
       <div className="flex gap-1">{...stars}</div>
-      <span className="text-sm text-gray-700">({reviewsCount})</span>
+      {reviewsCount && <span className="text-sm text-gray-700">({reviewsCount})</span>}
     </div>
   );
 }

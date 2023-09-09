@@ -1,5 +1,5 @@
-import BaseButton from '../UI/BaseButton';
-import BaseInput from '../UI/BaseInput';
+import BaseButton from '../BaseComponents/BaseButton';
+import BaseInput from '../BaseComponents/BaseInput';
 
 import { useState } from 'react';
 import { useRest } from '@/services';

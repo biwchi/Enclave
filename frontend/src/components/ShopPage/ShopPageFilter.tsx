@@ -3,7 +3,7 @@ import CheckIcon from '@/assets/icons/CheckIcon';
 import FillStarIcon from '@/assets/icons/stars/FillStarIcon';
 import EmptyStarIcon from '@/assets/icons/stars/EmptyStarIcon';
 
-import { defineTitle } from '../UI/BaseSelect';
+import { defineTitle } from '../BaseComponents/BaseSelect';
 import { useEffect, useRef, useState } from 'react';
 
 type ShopPageFilterProps<T> = {

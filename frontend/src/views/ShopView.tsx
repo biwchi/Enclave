@@ -1,13 +1,13 @@
 import ProductCard from '@/components/Common/ProductCard';
 import Loader from '@/components/Common/Loader';
-import ShopPageFilters from '@/components/Shop/ShopPageFilters';
-import ShopPageHeader from '@/components/Shop/ShopPageHeader';
+import ShopPageFilters from '@/components/ShopPage/ShopPageFilters';
+import ShopPageHeader from '@/components/ShopPage/ShopPageHeader';
 
 import { useRest } from '@/services';
 import { useShopStore } from '@/store/shopStore';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'usehooks-ts';
-import ShopPageFooter from '@/components/Shop/ShopPageFooter';
+import ShopPageFooter from '@/components/ShopPage/ShopPageFooter';
 
 export default function ShopView() {
   const [viewMode, setViewMode] = useState<'grid' | 'rows'>('rows');

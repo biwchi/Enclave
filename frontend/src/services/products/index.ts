@@ -17,7 +17,7 @@ export class ProductsRest extends BaseRest {
     return this.get<DefaultResponse<Category>>('products/category');
   }
 
-  public getProduct(id: string, params: ApiParams) {
+  public getProduct(id: string, params?: ApiParams) {
     return this.get<Product>(`products/${id}`, { params });
   }
 

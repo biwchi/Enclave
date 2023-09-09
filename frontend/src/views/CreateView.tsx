@@ -1,6 +1,6 @@
-import BaseInput from '@/components/UI/BaseInput';
-import BaseButton from '@/components/UI/BaseButton';
-import BaseSelect from '@/components/UI/BaseSelect';
+import BaseInput from '@/components/BaseComponents/BaseInput';
+import BaseButton from '@/components/BaseComponents/BaseButton';
+import BaseSelect from '@/components/BaseComponents/BaseSelect';
 import { useRest } from '@/services';
 import { CreateProduct } from '@/services/products/types';
 import { useShopStore } from '@/store/shopStore';

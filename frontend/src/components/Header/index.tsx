@@ -5,13 +5,13 @@ import UserIcon from '@/assets/icons/UserIcon';
 import FavoriteIcon from '@/assets/icons/favoriteIcon';
 import CartIcon from '@/assets/icons/CartIcon';
 
-import BaseSelect from '../UI/BaseSelect';
-import BaseButton from '../UI/BaseButton';
-import BaseIconButton from '../UI/BaseIconButton';
+import BaseSelect from '../BaseComponents/BaseSelect';
+import BaseButton from '../BaseComponents/BaseButton';
+import BaseIconButton from '../BaseComponents/BaseIconButton';
 
 import CategoriesDropDown from './HeaderCategoriesDropDown';
 import CategoriesNavBar from './HeaderCategorigesNavBar';
-import Modal from '../Modal';
+import Modal from '../Modals/Modal';
 import AuthModal from '../Auth/AuthModal';
 
 import { MouseEvent, useRef, useState } from 'react';

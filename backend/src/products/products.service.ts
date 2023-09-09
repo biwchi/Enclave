@@ -90,7 +90,6 @@ export class ProductsService {
     userId?: string,
   ) {
     const ordering: FindOptionsOrder<Product> = {
-      created_at: 'ASC',
       reviewCount:
         productFilters.ordering === ProductsOrderig.POPUlAR
           ? 'DESC'
