@@ -7,6 +7,8 @@ const button = cva(
   {
     variants: {
       variant: {
+        outline:
+          'bg-transparent border border-solid border-gray-500 text-gray-500 hover:bg-gray-200',
         primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-2',
         inWishlist: 'bg-red-600 text-red-200 hover:bg-red-700',
         toWishlist:

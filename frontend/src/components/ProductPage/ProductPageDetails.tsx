@@ -10,12 +10,12 @@ export default function ProductPageDetails() {
     <div>
       <span>{product.category.title}</span>
 
-      <h1 className="title text-primary-600">{product.title}</h1>
+      <h1 className="title pb-5 pt-5 text-primary-600">{product.title}</h1>
 
-      <div>
+      <div className="flex flex-col gap-5">
         <RatingStart rating={product.rating} reviewsCount={product.reviewCount} />
         <p>{product.description}</p>
-        <ColorPicker />
+        <ColorPicker onSelect={() => {}} />
       </div>
     </div>
   );
