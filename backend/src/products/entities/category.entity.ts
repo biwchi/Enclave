@@ -1,11 +1,7 @@
 import {
   Column,
   Entity,
-  Generated,
-  JoinColumn,
-  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   VirtualColumn,
 } from 'typeorm';

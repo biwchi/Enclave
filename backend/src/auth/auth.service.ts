@@ -18,15 +18,13 @@ export class AuthService {
       user ? user.password : '',
     );
 
-    if (user && passIsValid) {
-      return user;
-    }
-
+    if (user && passIsValid) return
     throw new BadRequestException('Email or password are incorrect');
   }
-
+  
   async login(user: IUser) {
     const payload = { id: user.id, email: user.email };
+
     return {
       access_token: this.jwtService.sign(payload),
     };

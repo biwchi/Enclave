@@ -1,4 +1,3 @@
-import { Ordering } from '../constant/Ordering';
 import { DefaultQuery } from './defaultQuery.dto';
 
 type DefaultMetaResponseParams = {

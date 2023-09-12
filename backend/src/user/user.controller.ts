@@ -3,21 +3,14 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
-  UsePipes,
-  ValidationPipe,
   UseGuards,
   Req,
   NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { LocalAuthGuard } from 'src/auth//guards/local-auth.guard';
-import { IUser } from 'src/types/user';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('user')
