@@ -1,17 +1,24 @@
 import ChevronIcon from '@/assets/icons/ChevronIcon';
+import { useCategiesContext } from '@/contexts/categoriesContext';
 import { useShopStore } from '@/store/shopStore';
 import { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 
 type CategoriesNavBarProps = {
   selected: number;
-  hide: boolean
+  hide: boolean;
   onHover: (event: MouseEvent<HTMLDivElement>, idx: number) => void;
   onLeave: () => void;
 };
 
-export default function CategoriesNavBar({ selected, hide, onHover, onLeave }: CategoriesNavBarProps) {
-  const { categories, setFilters } = useShopStore();
+export default function CategoriesNavBar({
+  selected,
+  hide,
+  onHover,
+  onLeave
+}: CategoriesNavBarProps) {
+  const { setFilters } = useShopStore();
+  const categories = useCategiesContext()
 
   return (
     <div className="m-auto flex justify-center bg-primary-600">

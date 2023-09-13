@@ -1,8 +1,10 @@
+import { useCategiesContext } from '@/contexts/categoriesContext';
 import { Category, SubCategory } from '@/services/products/types';
 import { useShopStore } from '@/store/shopStore';
 
 export default function ShopPageFilterCategories() {
-  const { categories, filters, setFilters } = useShopStore();
+  const { filters, setFilters } = useShopStore();
+  const categories = useCategiesContext();
 
   return (
     <div className="rounded-md bg-gray-100 p-5">

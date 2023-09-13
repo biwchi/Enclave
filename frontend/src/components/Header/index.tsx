@@ -15,16 +15,16 @@ import Modal from '../Modals/Modal';
 import AuthModal from '../Auth/AuthModal';
 
 import { MouseEvent, useRef, useState } from 'react';
-import { useShopStore } from '@/store/shopStore';
 import { Category } from '@/services/products/types';
 import { useLocalStorage } from 'usehooks-ts';
 import { useAuthStore } from '@/store/authStore';
 import { Link } from 'react-router-dom';
+import { useCategiesContext } from '@/contexts/categoriesContext';
 
 export default function SearchBar() {
   const dropDown = useRef<HTMLDivElement | null>(null);
+  const categories = useCategiesContext();
 
-  const { categories } = useShopStore();
   const { isLoggedIn, setIsLoggedIn } = useAuthStore();
 
   const [authModal, setAuthModal] = useState(false);
@@ -127,8 +127,9 @@ export default function SearchBar() {
 }
 
 function Search() {
-  const { categories } = useShopStore();
+  const categories = useCategiesContext();
   const [searchCategory, setSearchCategory] = useState<Category | undefined>(undefined);
+  
   return (
     <div className="flex w-full max-w-4xl rounded-full ring-2 ring-primary-600">
       <input

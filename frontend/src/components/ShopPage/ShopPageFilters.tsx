@@ -10,7 +10,6 @@ const brands = [
 
 export default function ShopPageFilters() {
   const { filters, setFilters } = useShopStore();
-
   return (
     <div>
       <ShopPageFilterCategories />
@@ -25,8 +24,8 @@ export default function ShopPageFilters() {
           <h1 className="font-medium">Price</h1>
           <div className="py-5">
             <ShopPageSliderFilter
-              min={0}
-              max={4000}
+              min={filters.priceMin ?? 0}
+              max={filters.priceMax ?? 4000}
               onChange={({ min, max }) => {
                 setFilters({ priceMin: min, priceMax: max });
               }}

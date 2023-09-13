@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Router } from './router';
-import { useShopStore } from './store/shopStore';
 import { useRest } from './services';
 import { useAuthStore } from './store/authStore';
 
 import Loader from './components/Common/Loader';
+import { Category } from './services/products/types';
+import { CategoriesContext } from './contexts/categoriesContext';
 
 function App() {
   const api = useRest();
-
-  const { setCategories } = useShopStore();
   const { isLoggedIn, setIsLoggedIn, setUser } = useAuthStore();
 
+  const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   async function getCategories() {
@@ -48,7 +48,9 @@ function App() {
       <Loader />
     </div>
   ) : (
-    <Router />
+    <CategoriesContext.Provider value={categories}>
+      <Router />
+    </CategoriesContext.Provider>
   );
 }
 

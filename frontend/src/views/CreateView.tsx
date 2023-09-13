@@ -3,12 +3,12 @@ import BaseButton from '@/components/BaseComponents/BaseButton';
 import BaseSelect from '@/components/BaseComponents/BaseSelect';
 import { useRest } from '@/services';
 import { CreateProduct } from '@/services/products/types';
-import { useShopStore } from '@/store/shopStore';
 import { useFormik } from 'formik';
+import { useCategiesContext } from '@/contexts/categoriesContext';
 
 export default function CreateView() {
   const api = useRest();
-  const { categories } = useShopStore();
+  const categories = useCategiesContext();
 
   const formik = useFormik<CreateProduct>({
     initialValues: {

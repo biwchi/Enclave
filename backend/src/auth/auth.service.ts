@@ -18,7 +18,7 @@ export class AuthService {
       user ? user.password : '',
     );
 
-    if (user && passIsValid) return
+    if (user && passIsValid) return user
     throw new BadRequestException('Email or password are incorrect');
   }
   

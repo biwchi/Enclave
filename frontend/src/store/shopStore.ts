@@ -1,5 +1,5 @@
 import { ProductsOrderig } from '@/constants/enums';
-import { Category, Product } from '@/services/products/types';
+import { Product } from '@/services/products/types';
 import { ApiParams, ResponseMeta } from '@/services/types';
 import { create } from 'zustand';
 
@@ -15,17 +15,14 @@ export type ShopFilters = {
 
 type ShopStore = {
   products: Product[];
-  categories: Category[];
   meta: ResponseMeta;
   filters: ShopFilters;
   setProducts: (products: Product[], meta?: ResponseMeta) => void;
-  setCategories: (categories: Category[]) => void;
   setFilters: (filters: ShopFilters) => void;
 };
 
 export const useShopStore = create<ShopStore>()((set) => ({
   products: [],
-  categories: [],
   meta: {
     count: 0,
     hasNext: false,
@@ -37,13 +34,11 @@ export const useShopStore = create<ShopStore>()((set) => ({
   filters: {
     page: 1,
     page_size: 20,
+    priceMax: 4000,
+    priceMin: 0,
     ordering: ProductsOrderig.RATING
   },
 
-  setCategories: (categories) =>
-    set(() => ({
-      categories
-    })),
   setFilters: (filters) =>
     set((state) => ({
       filters: {

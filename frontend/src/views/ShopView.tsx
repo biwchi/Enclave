@@ -10,10 +10,11 @@ import { useDebounce } from 'usehooks-ts';
 import ShopPageFooter from '@/components/ShopPage/ShopPageFooter';
 
 export default function ShopView() {
+  console.log('hello shop view')
+
   const [viewMode, setViewMode] = useState<'grid' | 'rows'>('rows');
   const [loading, setLoading] = useState(true);
-  console.log('render')
-  const { meta, products, filters, setProducts, setFilters } = useShopStore();
+  const { products, filters, setProducts, setFilters } = useShopStore();
 
   const api = useRest();
   const filtersDebounce = useDebounce(filters, 400);
@@ -22,9 +23,7 @@ export default function ShopView() {
     try {
       setLoading(true);
 
-      const response = await api.products.getProducts({
-        ...filters
-      });
+      const response = await api.products.getProducts(filters);
 
       setProducts(response.results, response.meta);
     } catch (error) {
@@ -36,7 +35,6 @@ export default function ShopView() {
 
   useEffect(() => {
     getProducts();
-    console.log(filtersDebounce);
   }, [filtersDebounce]);
 
   useEffect(() => {
@@ -48,11 +46,10 @@ export default function ShopView() {
   return (
     <div className="grid grid-cols-[272px,1fr] gap-5">
       <ShopPageFilters />
+
       <div>
-        <ShopPageHeader
-          viewMode={viewMode}
-          changeMode={(mode) => setViewMode(mode)}
-        />
+        <ShopPageHeader viewMode={viewMode} changeMode={(mode) => setViewMode(mode)} />
+
         <div
           className={
             'placeholder relative my-5 grid gap-3 ' + (viewMode === 'grid' && 'grid-cols-4')
@@ -101,6 +98,7 @@ export default function ShopView() {
             }
           })}
         </div>
+
         <ShopPageFooter />
       </div>
     </div>
