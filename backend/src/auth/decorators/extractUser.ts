@@ -1,4 +1,4 @@
-import { createParamDecorator } from '@nestjs/common';
+import { UnauthorizedException, createParamDecorator } from '@nestjs/common';
 import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
@@ -18,18 +18,21 @@ export const ExtractUser = createParamDecorator(
     const req: Request = ctx.switchToHttp().getRequest();
     const authHeader = req.headers.authorization;
 
-    if (!authHeader) return;
+    if (!authHeader) return false;
 
     const bearer = authHeader.split(' ')[0];
     const token = authHeader.split(' ')[1];
 
     if (bearer === 'Bearer' && token) {
-      const user = jwtService.verify(token, { secret: process.env.JWT_SECRET });
-
-      if (!user) return;
-
-      req.user = user;
-      return user;
+      try {
+        const user = jwtService.verify(token, {
+          secret: process.env.JWT_SECRET,
+        });
+        req.user = user;
+        return user;
+      } catch (error) {
+        throw new UnauthorizedException();
+      }
     }
   },
 );
