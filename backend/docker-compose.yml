@@ -1,0 +1,45 @@
+networks:
+  app_network:
+    driver: bridge
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+      
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: postgres 
+      DB_PASSWORD: 123
+      DB_NAME: Enclave   
+
+      JWT_SECRET: bebraepta123
+    ports:
+      - 8000:8000
+    networks:
+      - app_network
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:15.3
+    restart: always
+    user: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=Enclave
+      - POSTGRES_PASSWORD=123
+    expose:
+      - 5432
+    networks:
+      - app_network
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  db-data:

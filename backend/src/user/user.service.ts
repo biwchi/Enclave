@@ -27,7 +27,7 @@ export class UserService {
     });
 
     await this.cartRepository.insert({
-      user: {
+      user: {                                                             
         id: user.id,
       },
     });
